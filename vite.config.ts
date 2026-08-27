@@ -5,11 +5,13 @@ import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
+            ssr: 'resources/js/ssr.tsx',
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {
@@ -27,5 +29,6 @@ export default defineConfig({
         wayfinder({
             formVariants: true,
         }),
+        svgr(),
     ],
 });
