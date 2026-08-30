@@ -10,12 +10,12 @@
 @theme {
     --color-background: var(--background);
     --color-background-secondary: var(--background-secondary);
-    --color-background-tertiary: var(--background-tertiary);
 
     --color-main: var(--text-color1);
     --color-muted: var(--text-color2);
 
     --color-line: var(--line);
+    --color-label: var(--label-color);
     --color-btn-bg: var(--btn-bg);
     --color-btn-bg-hover: var(--btn-bg-hover);
     --color-btn-bg-medium: var(--btn-bg-medium);
@@ -133,7 +133,7 @@
 
 /* MODAL */
 @utility modal {
-    @apply bg-background max-[46.25em]:p-[2rem_2.2rem] relative m-auto w-[48rem] max-w-[90%] rounded-[0.8rem] border-none p-[3.5rem_3rem];
+    @apply relative m-auto w-[48rem] max-w-[90%] rounded-[0.8rem] border-none bg-background p-[3.5rem_3rem] max-[46.25em]:p-[2rem_2.2rem];
     @apply backdrop:bg-black/50;
 }
 
@@ -142,7 +142,7 @@
 }
 
 @utility modalCloseBtn {
-    @apply absolute right-0 top-0 flex items-center justify-center rounded-[0.5rem] border-none bg-transparent p-[0.5rem] text-[var(--text-color1)];
+    @apply absolute top-0 right-0 flex items-center justify-center rounded-[0.5rem] border-none bg-transparent p-[0.5rem] text-main tb:hidden;
 }
 
 @utility modalHeading {
@@ -154,7 +154,7 @@
 }
 
 @utility deleteText {
-    @apply mb-[2rem] max-h-[9rem] overflow-y-auto pr-[1rem] text-[1.3rem] leading-[1.9] text-[var(--text-color2)] [word-break:break-word];
+    @apply mb-[2rem] max-h-[9rem] overflow-y-auto pr-[1rem] text-[1.3rem] leading-[1.9] [word-break:break-word] text-[var(--text-color2)];
 
     /* Webkit scrollbar styling */
     &::-webkit-scrollbar {
@@ -169,7 +169,7 @@
 
 /* SIDEBAR */
 @utility sidebarBody {
-    @apply border-line bg-background absolute left-0 top-0 h-full w-[30rem] border-r;
+    @apply absolute top-0 left-0 h-full w-[30rem] border-r border-line bg-background;
     transition:
         transform 0.3s ease-in,
         opacity 0.2s ease-in;
@@ -193,7 +193,7 @@
 }
 
 @utility formLabel {
-    @apply mb-[0.8rem] text-[1.2rem] font-medium text-[var(--label-color)];
+    @apply mb-[0.8rem] text-[1.2rem] font-medium text-label;
 }
 
 @utility inputWrapper {
@@ -201,31 +201,31 @@
 }
 
 @utility formInput {
-    @apply h-[4rem] w-full cursor-pointer rounded-[0.5rem] border-[var(--border)] bg-[var(--background)] px-[1.5rem] py-[0.6rem] font-sans text-[1.3rem] font-medium leading-[1.9] text-[var(--text-color1)] transition-all duration-200 ease-in-out placeholder:opacity-50 hover:border-[var(--main-purple)] focus:border-[var(--main-purple)] focus:outline-[var(--main-purple)];
+    @apply h-[4rem] w-full cursor-pointer rounded-[0.5rem] border-[var(--border)] bg-background px-[1.5rem] py-[0.6rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-main transition-[var(--transition)] placeholder:opacity-50 hover:border-[var(--main-purple)] focus:border-[var(--main-purple)] focus:outline-[var(--main-purple)];
 }
 
 @utility formTextarea {
-    @apply w-full cursor-pointer rounded-[0.5rem] border-[var(--border)] bg-[var(--background)] px-[1.5rem] py-[0.6rem] font-sans text-[1.3rem] font-medium leading-[1.9] text-[var(--text-color1)] transition-all duration-200 ease-in-out placeholder:opacity-50 hover:border-[var(--main-purple)] focus:border-[var(--main-purple)] focus:outline-[var(--main-purple)];
+    @apply w-full cursor-pointer rounded-[0.5rem] border-[var(--border)] bg-background px-[1.5rem] py-[0.6rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-main transition-[var(--transition)] placeholder:opacity-50 hover:border-[var(--main-purple)] focus:border-[var(--main-purple)] focus:outline-[var(--main-purple)];
 }
 
 @utility inputError {
-    @apply border-[var(--color-red)];
+    @apply border-red;
 }
 
 @utility errorText {
-    @apply pointer-events-none absolute right-[1.2rem] top-1/2 -translate-y-1/2 text-[1.3rem] text-[var(--color-red)];
+    @apply pointer-events-none absolute top-1/2 right-[1.2rem] -translate-y-1/2 text-[1.3rem] text-red;
 }
 
 @utility formErrorText {
-    @apply text-[1.3rem] text-[var(--color-red)];
+    @apply text--red text-[1.3rem];
 }
 
 @utility formCloseBtn {
-    @apply shrink-0 cursor-pointer border-none bg-transparent text-[var(--medium-grey)];
+    @apply shrink-0 cursor-pointer border-none bg-transparent text-medium-grey;
 }
 
 @utility formErrorBtn {
-    @apply text-[var(--color-red)];
+    @apply text-color-red;
 }
 
 @utility rowsWrapper {
@@ -238,32 +238,32 @@
 
 /* BUTTON */
 @utility plusBtn {
-    @apply disabled:bg-main-purple/25 mr-[0.8rem] h-[3.2rem] w-[4.8rem] rounded-full text-white;
+    @apply mr-[0.8rem] h-[3.2rem] w-[4.8rem] rounded-full bg-main-purple text-white disabled:bg-main-purple/25;
 }
 
 @utility addBtn {
-    @apply mr-[1.8rem] h-auto w-auto cursor-pointer rounded-[50px] px-[3rem] py-[1.5rem] text-[1.5rem] font-semibold text-white transition-[var(--transition)] hover:bg-[var(--purple-hover)] disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-[var(--main-purple-25)];
+    @apply mr-[1.8rem] h-auto w-auto cursor-pointer rounded-[50px] border-none bg-main-purple px-[3rem] py-[1.5rem] font-[inherit] text-[1.5rem] font-semibold text-white transition-[var(--transition)] hover:bg-[var(--purple-hover)] disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-[var(--main-purple-25)];
 }
 
 @utility boardBtn {
-    @apply hover:text-main-purple flex w-full cursor-pointer items-center gap-[1.8rem] border-none bg-transparent p-6 pl-12 font-[inherit] text-[1.5rem] font-bold text-inherit transition-[var(--transition)] hover:rounded-r-[50px] hover:bg-[var(--bg-sidebar-hover)];
+    @apply flex w-full cursor-pointer items-center gap-[1.8rem] border-none bg-transparent p-6 pl-12 font-[inherit] text-[1.5rem] font-bold text-inherit transition-[var(--transition)] hover:rounded-r-[50px] hover:bg-[var(--bg-sidebar-hover)] hover:text-main-purple;
 
     &.active {
-        @apply bg-main-purple rounded-r-[50px] text-white;
+        @apply rounded-r-[50px] bg-main-purple text-white;
     }
 }
 
 @utility showBtn {
-    @apply bg-main-purple hover:bg-purple-hover absolute bottom-[3rem] left-0 flex h-[4.8rem] w-[5.6rem] cursor-pointer items-center justify-center rounded-r-[50px] border-none transition-[var(--transition)];
+    @apply absolute bottom-[3rem] left-0 flex h-[4.8rem] w-[5.6rem] cursor-pointer items-center justify-center rounded-r-[50px] border-none bg-main-purple transition-[var(--transition)] hover:bg-purple-hover;
 }
 
 /* Base modal button style */
 @utility btn {
-    @apply cursor-pointer rounded-[100px] border-none bg-transparent px-[3rem] py-[0.8rem] font-sans text-[1.3rem] font-bold leading-[1.8] transition-all duration-200 ease-in-out;
+    @apply cursor-pointer rounded-[100px] border-none bg-transparent px-[3rem] py-[0.8rem] font-sans text-[1.3rem] leading-[1.8] font-bold transition-all duration-200 ease-in-out;
 }
 
 @utility btnGroup {
-    @apply max-[46.25em]:flex-col flex w-full gap-[1.6rem] [&>.btn]:flex-1;
+    @apply flex w-full gap-[1.6rem] max-[46.25em]:flex-col [&>.btn]:flex-1;
 }
 
 @utility btnPrimary {
@@ -289,7 +289,7 @@
 
 /* UTILITIES */
 @utility visuallyHidden {
-    @apply max-[46.25em]:not-sr-only sr-only;
+    @apply sr-only max-[46.25em]:not-sr-only;
 }
 
 @utility mb-2 {
@@ -302,6 +302,10 @@
 
 @utility focusRing {
     @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--main-purple)];
+}
+
+@utility bg-tertiary {
+    background-image: var(--background-tertiary);
 }
 
 /* Keyframes & Animation Utilities */

@@ -10,12 +10,25 @@ class BoardController extends Controller
 {
     public function index ()
     {
-        $boards = Board::with([
-            'columns.tasks.subtasks',
-        ])->get();
+        $firstBoard = Board::first();
+        
+        if ($firstBoard) {
+            return redirect()->route('boards.show', $firstBoard->id);
+        }
 
-        return Inertia::render('boards/index', [
-            'boards' => $boards,
+        return Inertia::render('boards/show', [
+            'boards' => [],
+            'activeBoard' => null
+        ]);
+    }
+
+    public function show(Board $board)
+    {
+
+        $board->load('columns.tasks.subtasks');
+
+        return Inertia::render('boards/show', [
+            'activeBoard' => $board
         ]);
     }
 }

@@ -1,19 +1,9 @@
+import { useBoard } from '@/contexts/board-context';
 import IconChevronDown from '../icons/icon-chevron-down';
 import IconPlus from '../icons/icon-plus';
 
 import HeaderLogo from './header-logo';
 import HeaderMenuButton from './header-menu-button';
-
-// import { BoardStateContext } from '@/context/board/BoardProvider';
-// import NewTaskModal from './modal/NewTaskModal';
-// import EditBoardModal from './modal/EditBoardModal';
-// import DeleteBoardModal from './modal/DeleteBoardModal';
-// import AddTaskMobileIcon from '@/assets/icon-add-task-mobile.svg';
-// import HeaderMenuButton from './HeaderMenuButton';
-// import SkeletonTitle from '../ui/skeletons/SkeletonTitle';
-
-// import classes from './Header.module.css';
-// import '@/app/globals.css';
 
 interface HeaderProps {
     isOpen: boolean;
@@ -21,8 +11,7 @@ interface HeaderProps {
 }
 
 export default function Header({ isOpen, onToggleSidebar }: HeaderProps) {
-    // const { activeBoard, boards, isBoardLoading } =
-    //     useContext(BoardStateContext);
+    const { activeBoard } = useBoard();
 
     // const newTaskModal = useRef();
     // const editBoardModal = useRef();
@@ -60,7 +49,7 @@ export default function Header({ isOpen, onToggleSidebar }: HeaderProps) {
                         className="flex min-w-0 items-center gap-[1rem] border-none bg-none font-[inherit] text-main"
                     >
                         <h1 className="ml-[1.2rem] max-w-[14rem] min-w-0 shrink truncate text-[1.8rem] font-bold min-[25em]:max-w-[18rem] min-[33.75em]:max-w-[25rem] tb:ml-0 tb:text-[2rem] lg:text-[2.4rem]">
-                            Platform Launch
+                            {activeBoard ? 'Platform Launch' : 'No board found'}
                         </h1>
 
                         <IconChevronDown
@@ -71,7 +60,7 @@ export default function Header({ isOpen, onToggleSidebar }: HeaderProps) {
                     <div className="flex shrink-0 items-center">
                         <button
                             type="button"
-                            className="plusBtn flex items-center justify-center border-none bg-main-purple font-[inherit] tb:addBtn"
+                            className="plusBtn flex items-center justify-center tb:addBtn"
                             // onClick={handleOpenNewTask}
                             // disabled={
                             //     !activeBoard || error || boards.length === 0

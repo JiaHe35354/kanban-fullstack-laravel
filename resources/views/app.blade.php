@@ -47,6 +47,7 @@
         </x-inertia::head>
     </head>
     <body class="font-sans antialiased">
+        <div id="modal-root"></div>
         <x-inertia::app />
     </body>
 </html>

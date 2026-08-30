@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,9 +42,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
 
-            'boards' => fn() => $request->user()
-                ? $request->user()->boards()->select('id', 'name')->orderBy('created_at')->get()
-                : []
+            'boards' => fn() => User::first()?->boards()
+                ->select('id', 'name')
+                ->orderBy('created_at')
+                ->get() ?? [],
         ];
     }
 }

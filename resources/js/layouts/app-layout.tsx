@@ -5,6 +5,7 @@ import Sidebar from '@/components/sidebar/sidebar';
 import IconShowSidebar from '@/components/icons/icon-show-sidebar';
 import type { SharedProps } from '@/types';
 import Header from '@/components/header/Header';
+import CreateBoardModal from '@/components/board/modals/create-board-modal';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { boards } = usePage<SharedProps>().props;
@@ -71,7 +72,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            {/* <NewBoardModal ref={modal} /> */}
+            <CreateBoardModal />
 
             <div
                 className={`grid h-screen grid-cols-1 grid-rows-[6.4rem_1fr] transition-[grid-template-columns] duration-300 ease-in tb:grid-rows-[8.2rem_1fr] lg:grid-rows-[9.7rem_1fr] ${

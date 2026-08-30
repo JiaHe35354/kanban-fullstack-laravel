@@ -1,13 +1,45 @@
-export interface board {
+export interface Subtask {
+    id: number;
+    task_id: number;
+    title: string;
+    is_completed: boolean;
+}
+
+export interface Task {
+    id: number;
+    column_id: number;
+    title: string;
+    description: string;
+    position: number;
+    subtasks?: Subtask[];
+}
+
+export interface Column {
+    id: number;
+    board_id: number;
+    name: string;
+    color: string;
+    tasks?: Task[];
+}
+
+export interface Board {
+    id: number;
+    user_id: number;
+    name: string;
+    columns?: Column[];
+}
+
+export interface SidebarBoard {
     id: number;
     name: string;
-    created_at: string;
-    updated_at: string;
-    user_id: number;
+}
+
+export interface BoardContextType {
+    activeBoard: Board | null;
 }
 
 export interface SharedProps {
-    boards: board[];
+    boards: Board[];
     [key: string]: unknown;
 }
 
