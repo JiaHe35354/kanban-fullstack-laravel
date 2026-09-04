@@ -1,21 +1,24 @@
+import { useState } from 'react';
 import { useBoard } from '@/contexts/board-context';
+
 import IconChevronDown from '../icons/icon-chevron-down';
 import IconPlus from '../icons/icon-plus';
-
+import CreateTaskModal from '../task/modals/create-task-modal';
 import HeaderLogo from './header-logo';
 import HeaderMenuButton from './header-menu-button';
 
 interface HeaderProps {
-    isOpen: boolean;
+    isSidebarOpen: boolean;
     onToggleSidebar: () => void;
 }
 
-export default function Header({ isOpen, onToggleSidebar }: HeaderProps) {
+export default function Header({
+    isSidebarOpen,
+    onToggleSidebar,
+}: HeaderProps) {
     const { activeBoard } = useBoard();
 
-    // const newTaskModal = useRef();
-    // const editBoardModal = useRef();
-    // const deleteBoardModal = useRef();
+    const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
 
     // function handleOpenNewTask() {
     //     newTaskModal.current.open();
@@ -33,9 +36,10 @@ export default function Header({ isOpen, onToggleSidebar }: HeaderProps) {
 
     return (
         <>
-            {/* <NewTaskModal ref={newTaskModal} />
-            <EditBoardModal ref={editBoardModal} />
-            <DeleteBoardModal ref={deleteBoardModal} /> */}
+            <CreateTaskModal
+                isOpen={isCreateTaskModalOpen}
+                onClose={() => setIsCreateTaskModalOpen(false)}
+            />
 
             <header className="col-span-full row-start-1 row-end-2 flex items-center justify-between border-b border-line bg-background pr-[3rem] text-main">
                 <HeaderLogo />
@@ -53,7 +57,7 @@ export default function Header({ isOpen, onToggleSidebar }: HeaderProps) {
                         </h1>
 
                         <IconChevronDown
-                            className={`transition-[var(--transition)] tb:hidden ${isOpen ? 'rotate-180' : ''}`}
+                            className={`transition-[var(--transition)] tb:hidden ${isSidebarOpen ? 'rotate-180' : ''}`}
                         />
                     </button>
 
@@ -61,7 +65,7 @@ export default function Header({ isOpen, onToggleSidebar }: HeaderProps) {
                         <button
                             type="button"
                             className="plusBtn flex items-center justify-center tb:addBtn"
-                            // onClick={handleOpenNewTask}
+                            onClick={() => setIsCreateTaskModalOpen(true)}
                             // disabled={
                             //     !activeBoard || error || boards.length === 0
                             // }

@@ -1,3 +1,8 @@
+export interface ModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
 export interface Subtask {
     id: number;
     task_id: number;
@@ -38,7 +43,14 @@ export interface BoardContextType {
     activeBoard: Board | null;
 }
 
-export interface SharedProps {
+export interface SharedProps extends PageProps {
+    auth: {
+        user: {
+            id: number;
+            name: string;
+            email: string;
+        } | null;
+    };
     boards: Board[];
     [key: string]: unknown;
 }

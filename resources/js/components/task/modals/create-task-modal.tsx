@@ -1,95 +1,45 @@
-import React, { act, useEffect, useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 
 import Modal from '@/components/ui/modal';
 import FormField from '@/components/ui/form-field';
 import DynamicInputList, {
     type DynamicItem,
 } from '@/components/ui/dynamic-input-list';
-import StatusDropDown from '@/components/ui/status-drop-down';
 import { useBoard } from '@/contexts/board-context';
-import type { ModalProps, Task } from '@/types';
-import { useTaskModal } from '@/contexts/task-modal-context';
+import StatusDropDown from '@/components/ui/status-drop-down';
+import type { ModalProps } from '@/types';
 
-interface EditTaskModalProps extends ModalProps {
-    task: Task | null;
-}
-
-export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
-    const { activeTask } = useTaskModal();
+export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
     const { activeBoard } = useBoard();
     const columns = activeBoard?.columns ?? [];
 
     const [submitted, setSubmitted] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-    const [formError, setFormError] = useState<string | null>(null);
-
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        subtasks: [] as DynamicItem[],
+        subtasks: [{ id: crypto.randomUUID(), value: '' }] as DynamicItem[],
         status: '',
     });
 
-    // Populate initial state whenever the selected task changes
+    // Sync initial status when activeBoard columns load or update
     useEffect(() => {
-        if (activeTask) {
-            setFormData({
-                title: activeTask.title,
-                description: activeTask.description ?? '',
-                subtasks:
-                    activeTask.subtasks?.map((subtask) => ({
-                        id: String(subtask.id ?? crypto.randomUUID()),
-                        value: subtask.title,
-                    })) ?? [],
-                status: String(activeTask.column_id ?? ''),
-            });
-
-            setSubmitted(false);
-            setFormError(null);
+        if (columns.length > 0 && !formData.status) {
+            setFormData((prev) => ({ ...prev, status: String(columns[0].id) }));
         }
-    }, [activeTask]);
-
-    if (!activeTask) return null;
+    }, [columns, formData.status]);
 
     const isTitleInvalid = !formData.title.trim();
     const hasEmptySubtasks = formData.subtasks.some((s) => !s.value.trim());
 
-    // Check if form contents have actually changed from the original task state
-    const isTitleChanged = formData.title !== activeTask.title;
-    const isDescriptionChanged =
-        formData.description !== (activeTask.description ?? '');
-    const isSubtaskChanged =
-        formData.subtasks.length !== (activeTask.subtasks?.length ?? 0) ||
-        formData.subtasks.some((sub, index) => {
-            const original = activeTask.subtasks?.[index];
-
-            return sub.value !== original?.title;
-        });
-    const isStatusChanged =
-        formData.status !== String(activeTask.column_id ?? '');
-
-    const isDataChanged =
-        isTitleChanged ||
-        isDescriptionChanged ||
-        isSubtaskChanged ||
-        isStatusChanged;
-
     const resetForm = () => {
         setSubmitted(false);
-        setFormError(null);
-
-        if (activeTask) {
-            setFormData({
-                title: activeTask.title,
-                description: activeTask.description ?? '',
-                subtasks:
-                    activeTask.subtasks?.map((subtask) => ({
-                        id: String(subtask.id ?? crypto.randomUUID()),
-                        value: subtask.title,
-                    })) ?? [],
-                status: String(activeTask.column_id ?? ''),
-            });
-        }
+        setFormData({
+            title: '',
+            description: '',
+            subtasks: [{ id: crypto.randomUUID(), value: '' }],
+            status: columns[0]?.id ? String(columns[0].id) : '',
+        });
     };
 
     const handleClose = () => {
@@ -133,42 +83,39 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
         }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    // const getErrorMessage = () => {
+    //     if (!submitted) return null;
+
+    //     if (isTitleInvalid) return "Can't be empty";
+
+    //     // if (isDuplicate) return 'Name already used';
+
+    //     return null;
+    // };
+
+    const handleSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
         setSubmitted(true);
-        setFormError(null);
 
         if (isTitleInvalid || hasEmptySubtasks) return;
 
-        setIsSaving(true);
-        try {
-            const payload = {
-                taskId: activeTask.id,
-                title: formData.title,
-                description: formData.description,
-                status: formData.status,
-                subtasks: formData.subtasks.map((s) => ({
-                    id: s.id,
-                    title: s.value,
-                })),
-            };
+        const payload = {
+            title: formData.title,
+            description: formData.description,
+            status: formData.status,
+            subtasks: formData.subtasks.map((s) => ({ title: s.value })),
+        };
 
-            // Dispatch backend/Inertia action here
-            // e.g., router.put(`/tasks/${task.id}`, payload);
+        // Dispatch backend action here
 
-            handleClose();
-        } catch (err) {
-            setFormError('Failed to save changes. Please try again.');
-        } finally {
-            setIsSaving(false);
-        }
+        handleClose();
     };
 
     const selectedColumn =
         columns.find((c) => String(c.id) === formData.status) || columns[0];
 
     return (
-        <Modal title="Edit Task" isOpen={isOpen} onClose={handleClose}>
+        <Modal title="Add New Task" isOpen={isOpen} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="modalForm">
                 <FormField
                     label="Title"
@@ -178,8 +125,8 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
                     }
                     inputProps={{
                         value: formData.title,
+                        placeholder: 'e.g. Take coffee break',
                         onChange: handleTitleChange,
-                        disabled: isSaving,
                     }}
                 />
 
@@ -187,11 +134,13 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
                     label="Description"
                     labelName="description"
                     isTextArea
+                    // error={getErrorMessage()}
                     textAreaProps={{
                         value: formData.description,
+                        placeholder:
+                            "e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little.",
                         onChange: handleDescriptionChange,
                         rows: 4,
-                        disabled: isSaving,
                     }}
                 />
 
@@ -203,7 +152,6 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
                     onChange={handleUpdateSubtask}
                     onRemove={handleRemoveSubtask}
                     onAdd={handleAddSubtask}
-                    disabled={isSaving}
                 />
 
                 <div className="formControl">
@@ -221,20 +169,11 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
                                 status: statusId,
                             }))
                         }
-                        disabled={isSaving}
                     />
                 </div>
 
-                {formError && (
-                    <p className="text-[1.2rem] text-red">{formError}</p>
-                )}
-
-                <button
-                    type="submit"
-                    disabled={!isDataChanged || isSaving}
-                    className="btn btnPrimary"
-                >
-                    {isSaving ? 'Saving...' : 'Save Changes'}
+                <button type="submit" className="btn btnPrimary">
+                    Create Task
                 </button>
             </form>
         </Modal>

@@ -42,7 +42,7 @@ export default function DynamicInputList({
                                 <input
                                     type="text"
                                     value={item.value}
-                                    disabled={disabled}
+                                    // disabled={disabled}
                                     onChange={(e) =>
                                         onChange(item.id, e.target.value)
                                     }
@@ -58,7 +58,7 @@ export default function DynamicInputList({
                             {items.length > 1 && (
                                 <button
                                     type="button"
-                                    disabled={disabled}
+                                    // disabled={disabled}
                                     onClick={() => onRemove(item.id)}
                                     className={`formCloseBtn ${isInvalid ? 'formErrorBtn' : ''}`}
                                 >
@@ -73,7 +73,7 @@ export default function DynamicInputList({
             {items.length < maxItems && (
                 <button
                     type="button"
-                    disabled={disabled}
+                    // disabled={disabled}
                     onClick={onAdd}
                     className="btn btnSecondary"
                 >

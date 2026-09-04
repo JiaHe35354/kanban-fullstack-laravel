@@ -1,9 +1,8 @@
+import { handleDialogBackdropClick } from '@/util/dialog';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import IconCross from '@/components/icons/icon-cross';
-import { handleDialogBackdropClick } from '@/util/dialog';
 
-interface ModalProps {
+interface ConfirmModalProps {
     title: string;
     isOpen: boolean;
     onClose: () => void;
@@ -11,14 +10,15 @@ interface ModalProps {
     children: ReactNode;
 }
 
-export default function Modal({
+export default function ConfirmModal({
     title,
     isOpen,
     onClose,
     isLoading = false,
     children,
-}: ModalProps) {
+}: ConfirmModalProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
+
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => setMounted(true), []);
@@ -48,20 +48,9 @@ export default function Modal({
                 isLoading ? e.preventDefault() : onClose();
             }}
         >
-            {title && (
-                <div className="modalHeader">
-                    <h3 className="modalHeading">{title}</h3>
-                    <button
-                        type="button"
-                        disabled={isLoading}
-                        onClick={onClose}
-                        className="modalCloseBtn"
-                        aria-label="Close modal"
-                    >
-                        <IconCross />
-                    </button>
-                </div>
-            )}
+            <div className="modalHeader">
+                <h3 className="modalHeading headingDanger">{title}</h3>
+            </div>
             {children}
         </dialog>,
         modalRoot,

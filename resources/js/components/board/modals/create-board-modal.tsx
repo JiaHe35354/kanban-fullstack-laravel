@@ -1,77 +1,103 @@
 import { useState } from 'react';
+
 import Modal from '@/components/ui/modal';
 import FormField from '@/components/ui/form-field';
 import DynamicInputList, {
     type DynamicItem,
 } from '@/components/ui/dynamic-input-list';
+import type { ModalProps } from '../../../types/index';
 
-export default function NewBoardModal({
-    isOpen,
-    onClose,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-}) {
-    const [name, setName] = useState('');
-    const [submitted, setSubmitted] = useState(false);
+export default function CreateBoardModal({ isOpen, onClose }: ModalProps) {
+    const [boardName, setBoardName] = useState('');
+    const [isDuplicate, setIsDuplicate] = useState(false);
     const [columns, setColumns] = useState<DynamicItem[]>([
-        { id: crypto.randomUUID(), value: 'Todo' },
-        { id: crypto.randomUUID(), value: 'Doing' },
+        { id: crypto.randomUUID(), value: '' },
     ]);
+    const [submitted, setSubmitted] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const isBoardNameInvalid = !boardName.trim();
+    const hasEmptyCol = columns.some((c) => !c.value.trim());
+
+    const getErrorMessage = () => {
+        if (!submitted) return null;
+
+        if (isBoardNameInvalid) return "Can't be empty";
+
+        if (isDuplicate) return 'Name already used';
+
+        return null;
+    };
+
+    const resetForm = () => {
+        setSubmitted(false);
+        setBoardName('');
+        setIsDuplicate(false);
+        setColumns([{ id: crypto.randomUUID(), value: '' }]);
+    };
+
+    const handleClose = () => {
+        resetForm();
+        onClose();
+    };
+
+    const handleBoardNameChange = (e) => {
+        setBoardName(e.target.value);
+        setIsDuplicate(false);
+    };
+
+    const handleAddColumn = () => {
+        setColumns((prev) => [...prev, { id: crypto.randomUUID(), value: '' }]);
+        setSubmitted(false);
+    };
+
+    const handleUpdateColumn = (id: string, value: string) => {
+        setColumns((prev) =>
+            prev.map((col) => (col.id === id ? { ...col, value: value } : col)),
+        );
+    };
+
+    const handleRemoveColumn = (id: string) => {
+        setColumns((prev) => prev.filter((col) => col.id !== id));
+    };
+
+    const handleSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
         setSubmitted(true);
-        if (!name.trim() || columns.some((c) => !c.value.trim())) return;
+
+        if (isBoardNameInvalid || hasEmptyCol) return;
 
         // Dispatch action
+
         onClose();
     };
 
     return (
-        <Modal title="Add New Board" isOpen={isOpen} onClose={onClose}>
-            <form
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-[1.2rem]"
-            >
+        <Modal title="Add New Board" isOpen={isOpen} onClose={handleClose}>
+            <form onSubmit={handleSubmit} className="modalForm">
                 <FormField
-                    label="Board Name"
-                    error={
-                        submitted && !name.trim() ? "Can't be empty" : undefined
-                    }
+                    label="Name"
+                    labelName="name"
+                    error={getErrorMessage()}
                     inputProps={{
-                        value: name,
+                        value: boardName,
                         placeholder: 'e.g. Web Design',
-                        onChange: (e) => setName(e.target.value),
+                        onChange: handleBoardNameChange,
                     }}
                 />
 
                 <DynamicInputList
-                    label="Board Columns"
+                    label="Columns"
                     addButtonText="+ Add New Column"
                     items={columns}
                     submitted={submitted}
-                    onChange={(id, val) =>
-                        setColumns((prev) =>
-                            prev.map((c) =>
-                                c.id === id ? { ...c, value: val } : c,
-                            ),
-                        )
-                    }
-                    onRemove={(id) =>
-                        setColumns((prev) => prev.filter((c) => c.id !== id))
-                    }
-                    onAdd={() =>
-                        setColumns((prev) => [
-                            ...prev,
-                            { id: crypto.randomUUID(), value: '' },
-                        ])
-                    }
+                    onChange={handleUpdateColumn}
+                    onRemove={handleRemoveColumn}
+                    onAdd={handleAddColumn}
                 />
 
                 <button
                     type="submit"
-                    className="bg-main-purple hover:bg-purple-hover mt-[1rem] w-full cursor-pointer rounded-[2rem] py-[1.2rem] text-[1.3rem] font-bold text-white transition-colors"
+                    className="mt-[1rem] w-full cursor-pointer rounded-[2rem] bg-main-purple py-[1.2rem] text-[1.3rem] font-bold text-white transition-colors hover:bg-purple-hover"
                 >
                     Create New Board
                 </button>

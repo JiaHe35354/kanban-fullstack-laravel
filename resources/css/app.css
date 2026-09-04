@@ -19,6 +19,7 @@
     --color-btn-bg: var(--btn-bg);
     --color-btn-bg-hover: var(--btn-bg-hover);
     --color-btn-bg-medium: var(--btn-bg-medium);
+    --color-sidebar-hover: var(--bg-sidebar-hover);
 
     /* Static Brand Tokens */
     --color-main-purple: var(--main-purple);
@@ -73,7 +74,6 @@
 
     --transition: all 0.2s ease-in;
     --card-shadow: 0 0.5rem 0.8rem rgba(130, 143, 163, 0.15);
-    --border: 1.6px solid var(--medium-grey-25);
 }
 
 [data-theme='light'],
@@ -133,7 +133,7 @@
 
 /* MODAL */
 @utility modal {
-    @apply relative m-auto w-[48rem] max-w-[90%] rounded-[0.8rem] border-none bg-background p-[3.5rem_3rem] max-[46.25em]:p-[2rem_2.2rem];
+    @apply relative m-auto w-[48rem] max-w-[90%] rounded-[0.8rem] border-none bg-background p-[2rem_2.2rem] tb:p-[3.5rem_3rem];
     @apply backdrop:bg-black/50;
 }
 
@@ -142,19 +142,19 @@
 }
 
 @utility modalCloseBtn {
-    @apply absolute top-0 right-0 flex items-center justify-center rounded-[0.5rem] border-none bg-transparent p-[0.5rem] text-main tb:hidden;
+    @apply absolute top-0 right-0 flex items-center justify-center rounded-[0.5rem] border-none bg-transparent p-[0.5rem] text-main tb:sr-only;
 }
 
 @utility modalHeading {
-    @apply text-[1.8rem] font-bold text-[var(--text-color1)];
+    @apply text-[1.8rem] font-bold text-main;
 }
 
 @utility headingDanger {
-    @apply text-[var(--color-red)];
+    @apply text-red;
 }
 
 @utility deleteText {
-    @apply mb-[2rem] max-h-[9rem] overflow-y-auto pr-[1rem] text-[1.3rem] leading-[1.9] [word-break:break-word] text-[var(--text-color2)];
+    @apply mb-[2rem] max-h-[9rem] overflow-y-auto pr-[1rem] text-[1.3rem] leading-[1.9] [word-break:break-word] text-muted;
 
     /* Webkit scrollbar styling */
     &::-webkit-scrollbar {
@@ -201,15 +201,15 @@
 }
 
 @utility formInput {
-    @apply h-[4rem] w-full cursor-pointer rounded-[0.5rem] border-[var(--border)] bg-background px-[1.5rem] py-[0.6rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-main transition-[var(--transition)] placeholder:opacity-50 hover:border-[var(--main-purple)] focus:border-[var(--main-purple)] focus:outline-[var(--main-purple)];
+    @apply h-[4rem] w-full cursor-pointer rounded-[0.5rem] border-[1.6px] border-solid border-medium-grey-25 bg-background px-[1.5rem] py-[0.6rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-main transition-[var(--transition)] placeholder:opacity-50 hover:border-main-purple focus:border-main-purple focus:outline-main-purple;
 }
 
 @utility formTextarea {
-    @apply w-full cursor-pointer rounded-[0.5rem] border-[var(--border)] bg-background px-[1.5rem] py-[0.6rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-main transition-[var(--transition)] placeholder:opacity-50 hover:border-[var(--main-purple)] focus:border-[var(--main-purple)] focus:outline-[var(--main-purple)];
+    @apply w-full cursor-pointer rounded-[0.5rem] border-[1.6px] border-solid border-medium-grey-25 bg-background px-[1.5rem] py-[0.6rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-main transition-[var(--transition)] placeholder:opacity-50 hover:border-main-purple focus:border-main-purple focus:outline-main-purple;
 }
 
 @utility inputError {
-    @apply border-red;
+    @apply border-red hover:border-red focus:border-red focus:outline-red;
 }
 
 @utility errorText {
@@ -217,7 +217,7 @@
 }
 
 @utility formErrorText {
-    @apply text--red text-[1.3rem];
+    @apply text-[1.3rem] text-red;
 }
 
 @utility formCloseBtn {
@@ -225,7 +225,7 @@
 }
 
 @utility formErrorBtn {
-    @apply text-color-red;
+    @apply text-red;
 }
 
 @utility rowsWrapper {
@@ -236,17 +236,46 @@
     @apply flex w-full items-center justify-stretch gap-[1.6rem];
 }
 
+/* SUBTASKS */
+@utility checkbox {
+    @apply grid h-[1.6rem] w-[1.6rem] cursor-pointer appearance-none place-content-center rounded-[0.2rem] border border-medium-grey-25 bg-background transition-[var(--transition)];
+
+    /* Checkmark pseudoelement */
+    &::before {
+        content: '';
+        @apply h-[1rem] w-[1rem] origin-center scale-0 bg-white;
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+
+    &:checked {
+        @apply bg-main-purple;
+    }
+
+    &:checked::before {
+        @apply scale-100;
+    }
+
+    /* Target adjacent subtask label when checked */
+    &:checked + .subtaskLabel {
+        @apply line-through opacity-50;
+    }
+}
+
+@utility subtaskLabel {
+    @apply cursor-pointer [word-break:break-word];
+}
+
 /* BUTTON */
 @utility plusBtn {
     @apply mr-[0.8rem] h-[3.2rem] w-[4.8rem] rounded-full bg-main-purple text-white disabled:bg-main-purple/25;
 }
 
 @utility addBtn {
-    @apply mr-[1.8rem] h-auto w-auto cursor-pointer rounded-[50px] border-none bg-main-purple px-[3rem] py-[1.5rem] font-[inherit] text-[1.5rem] font-semibold text-white transition-[var(--transition)] hover:bg-[var(--purple-hover)] disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-[var(--main-purple-25)];
+    @apply mr-[1.8rem] h-auto w-auto cursor-pointer rounded-[50px] border-none bg-main-purple px-[3rem] py-[1.5rem] font-[inherit] text-[1.5rem] font-semibold text-white transition-[var(--transition)] hover:bg-purple-hover disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-main-purple-25;
 }
 
 @utility boardBtn {
-    @apply flex w-full cursor-pointer items-center gap-[1.8rem] border-none bg-transparent p-6 pl-12 font-[inherit] text-[1.5rem] font-bold text-inherit transition-[var(--transition)] hover:rounded-r-[50px] hover:bg-[var(--bg-sidebar-hover)] hover:text-main-purple;
+    @apply flex w-full cursor-pointer items-center gap-[1.8rem] border-none bg-transparent p-6 pl-12 font-[inherit] text-[1.5rem] font-bold text-inherit transition-[var(--transition)] hover:rounded-r-[50px] hover:bg-sidebar-hover hover:text-main-purple;
 
     &.active {
         @apply rounded-r-[50px] bg-main-purple text-white;
@@ -259,23 +288,23 @@
 
 /* Base modal button style */
 @utility btn {
-    @apply cursor-pointer rounded-[100px] border-none bg-transparent px-[3rem] py-[0.8rem] font-sans text-[1.3rem] leading-[1.8] font-bold transition-all duration-200 ease-in-out;
+    @apply cursor-pointer rounded-[100px] border-none bg-transparent px-[3rem] py-[0.8rem] font-sans text-[1.3rem] leading-[1.8] font-bold transition-[var(--transition)];
 }
 
 @utility btnGroup {
-    @apply flex w-full gap-[1.6rem] max-[46.25em]:flex-col [&>.btn]:flex-1;
+    @apply flex w-full flex-col gap-[1.6rem] tb:flex-row [&>.btn]:flex-1;
 }
 
 @utility btnPrimary {
-    @apply bg-[var(--main-purple)] text-[var(--white)] hover:bg-[var(--purple-hover)] disabled:cursor-not-allowed disabled:bg-[var(--purple-hover)] disabled:opacity-70;
+    @apply bg-main-purple text-white hover:bg-purple-hover disabled:cursor-not-allowed disabled:bg-purple-hover disabled:opacity-70;
 }
 
 @utility btnSecondary {
-    @apply bg-[var(--btn-bg)] text-[var(--main-purple)] hover:bg-[var(--btn-bg-hover)] disabled:cursor-not-allowed disabled:bg-[var(--btn-bg)];
+    @apply bg-btn-bg text-main-purple hover:bg-btn-bg-hover disabled:cursor-not-allowed disabled:bg-btn-bg;
 }
 
 @utility btnDanger {
-    @apply bg-[var(--color-red)] text-[var(--white)] hover:bg-[var(--red-hover)] disabled:cursor-not-allowed disabled:bg-[var(--red-hover)] disabled:opacity-70;
+    @apply bg-red text-white hover:bg-red-hover disabled:cursor-not-allowed disabled:bg-red-hover disabled:opacity-70;
 }
 
 /* LOADING */
@@ -284,12 +313,12 @@
 }
 
 @utility spinner {
-    @apply h-[4rem] w-[4rem] animate-spin rounded-full border-4 border-solid border-[var(--lines-light)] border-t-[var(--main-purple)];
+    @apply h-[4rem] w-[4rem] animate-spin rounded-full border-4 border-solid border-[var(--lines-light)] border-t-main-purple;
 }
 
 /* UTILITIES */
 @utility visuallyHidden {
-    @apply sr-only max-[46.25em]:not-sr-only;
+    @apply not-sr-only tb:sr-only;
 }
 
 @utility mb-2 {
@@ -301,7 +330,7 @@
 }
 
 @utility focusRing {
-    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--main-purple)];
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main-purple;
 }
 
 @utility bg-tertiary {
@@ -333,15 +362,4 @@
 
 @utility fade-out {
     animation: fadeOut 0.2s ease-out;
-}
-
-/* Media Query Overrides (max-width: 46.25em / 740px) */
-@media only screen and (max-width: 46.25em) {
-    .modal {
-        padding: 2rem 2.2rem;
-    }
-
-    .btnGroup {
-        flex-direction: column;
-    }
 }

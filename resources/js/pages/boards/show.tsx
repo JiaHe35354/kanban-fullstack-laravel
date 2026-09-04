@@ -8,8 +8,6 @@ interface BoardsShowProps {
 }
 
 export default function BoardsShow({ activeBoard }: BoardsShowProps) {
-    console.log(activeBoard);
-
     return (
         <BoardProvider value={{ activeBoard }}>
             <AppLayout>{activeBoard && <BoardView />}</AppLayout>

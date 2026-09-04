@@ -1,45 +1,48 @@
 import { useState } from 'react';
 
-import { useBoard } from '@/contexts/board-context';
 import ConfirmModal from '@/components/ui/confirm-modal';
 import type { ModalProps } from '@/types';
+import { useTaskModal } from '@/contexts/task-modal-context';
 
-export default function DeleteBoardModal({ isOpen, onClose }: ModalProps) {
-    const { activeBoard } = useBoard();
+export default function DeleteTaskModal({ isOpen, onClose }: ModalProps) {
     const [isDeleting, setIsDeleting] = useState(false);
-    const [formError, setFormError] = useState<string | null>(null);
+    const [deleteError, setDeleteError] = useState(null);
 
-    console.log(activeBoard);
+    const { activeTask } = useTaskModal();
 
     async function handleDeleteBoard() {
-        if (!activeBoard) return;
+        // if (!activeBoard) return;
 
-        setIsDeleting(true);
-        setFormError(null);
+        // setIsDeleting(true);
+        // setFormError(null);
 
-        try {
-            // Add your deletion logic here
-            onClose();
-        } catch (err) {
-            setFormError('Failed to delete board. Please try again.');
-        } finally {
-            setIsDeleting(false);
-        }
+        // try {
+        //     // Add your deletion logic here
+        //     onClose();
+        // } catch (err) {
+        //     setFormError('Failed to delete board. Please try again.');
+        // } finally {
+        //     setIsDeleting(false);
+        // }
+        console.log('delete task');
     }
 
     return (
         <ConfirmModal
-            title="Delete this board?"
+            title="Delete this task?"
             isOpen={isOpen}
             onClose={onClose}
             isLoading={isDeleting}
         >
             <section>
                 <p className="deleteText">
-                    {`Are you sure you want to delete the "${activeBoard?.name}" board? This action will remove all columns and tasks and cannot be reversed.`}
+                    {`Are you sure you want to delete the "${activeTask?.title}" task and its subtasks? This action cannot be 
+          reversed.`}
                 </p>
 
-                {formError && <p className="mb-2 formErrorText">{formError}</p>}
+                {deleteError && (
+                    <p className="mb-2 formErrorText">{deleteError}</p>
+                )}
 
                 <div className="btnGroup">
                     <button
