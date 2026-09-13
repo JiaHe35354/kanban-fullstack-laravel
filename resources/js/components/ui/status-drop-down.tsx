@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 
 import IconChevronDown from '../icons/icon-chevron-down';
 import { disable } from '../../routes/two-factor/index';
+import { formatName } from '@/lib/utils';
 
 export interface StatusOption {
-    id: string | number;
+    id: number;
     name: string;
 }
 
 interface StatusDropDownProps {
     value?: string;
     options: StatusOption[];
-    onChange: (id: string) => void;
+    onChange: (id: number) => void;
     disabled?: boolean;
 }
 
@@ -67,7 +68,7 @@ export default function StatusDropDown({
     function handleSelect(option: StatusOption, e: React.MouseEvent) {
         e.stopPropagation();
 
-        onChange(String(option.id));
+        onChange(option.id);
         setMenuOpen(false);
     }
 
@@ -80,7 +81,7 @@ export default function StatusDropDown({
                 disabled={disabled}
                 onClick={toggleMenu}
             >
-                <span className="truncate">{value}</span>
+                <span className="truncate">{formatName(value)}</span>
                 <span>
                     <IconChevronDown />
                 </span>
@@ -103,7 +104,7 @@ export default function StatusDropDown({
                                 className="font-inherit w-full cursor-pointer truncate border-none bg-transparent text-left text-[1.3rem] text-muted transition-[var(--transition)] hover:text-main"
                                 onClick={(e) => handleSelect(option, e)}
                             >
-                                {option.name}
+                                {formatName(option.name)}
                             </button>
                         </li>
                     ))}

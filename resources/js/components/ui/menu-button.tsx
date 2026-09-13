@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import IconVerticalEllipsis from '../icons/icon-vertical-ellipsis';
 import { useTaskModal } from '@/contexts/task-modal-context';
+import { cn } from '@/lib/utils';
 
 interface MenuButtonProps {
     disabled?: boolean;
@@ -75,11 +76,12 @@ export default function MenuButton({ disabled }: MenuButtonProps) {
                 ref={menuRef}
                 role="menu"
                 id="options-menu"
-                className={`fixed z-10 flex w-[19.2rem] list-none flex-col gap-[2.2rem] rounded-[0.8rem] bg-background p-[2rem] text-[1.3rem] font-medium text-muted shadow-[0_2px_5px_rgba(130,143,163,0.2)] transition-[var(--transition)] ${
+                className={cn(
+                    'fixed z-10 flex w-[19.2rem] list-none flex-col gap-[2.2rem] rounded-[0.8rem] bg-background p-[2rem] text-[1.3rem] font-medium text-muted shadow-[0_2px_5px_rgba(130,143,163,0.2)] transition-[var(--transition)]',
                     isMenuOpen
                         ? 'pointer-events-auto translate-y-0 scale-100 opacity-100'
-                        : 'pointer-events-none -translate-y-[1rem] scale-90 opacity-0'
-                }`}
+                        : 'pointer-events-none -translate-y-[1rem] scale-90 opacity-0',
+                )}
                 style={
                     dropdownPos
                         ? {
@@ -102,7 +104,7 @@ export default function MenuButton({ disabled }: MenuButtonProps) {
                         Edit Task
                     </button>
                 </li>
-                <li className="w-full cursor-pointer text-red hover:text-red hover:opacity-80 hover:opacity-100">
+                <li className="w-full cursor-pointer text-red hover:text-red hover:opacity-80">
                     <button
                         type="button"
                         className="font-inherit cursor-pointer border-none bg-transparent text-inherit transition-[var(--transition)]"

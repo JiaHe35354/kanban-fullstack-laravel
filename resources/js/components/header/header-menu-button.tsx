@@ -68,15 +68,11 @@ export default function HeaderMenuButton() {
                         ref={menuRef}
                         role="menu"
                         id="board-options-menu"
-                        className={`absolute top-[6.2rem] right-0 z-10 flex w-[19rem] list-none flex-col gap-[2.2rem] rounded-[0.8rem] bg-background p-[2rem] text-[1.3rem] font-medium text-muted transition-[var(--transition)] ${
-                            isMenuOpen
-                                ? 'pointer-events-auto translate-y-0 scale-100 opacity-100'
-                                : 'pointer-events-none -translate-y-[1rem] scale-90 opacity-0'
-                        } `}
+                        className="pointer-events-auto absolute top-[6.2rem] right-0 z-10 flex w-[19rem] translate-y-0 scale-100 list-none flex-col gap-[2.2rem] rounded-[0.8rem] bg-background p-[2rem] text-[1.3rem] font-medium text-muted opacity-100 transition-[var(--transition)]"
                     >
                         <li className="cursor-pointer hover:opacity-[0.8]">
                             <button
-                                className="font-inherit cursor-pointer border-none bg-transparent font-[inherit] text-[inherit] text-inherit transition-[var(--transition)]"
+                                className="font-inherit cursor-pointer border-none bg-transparent text-inherit transition-[var(--transition)]"
                                 type="button"
                                 onClick={() => {
                                     setIsEditOpen(true);
@@ -86,11 +82,9 @@ export default function HeaderMenuButton() {
                                 Edit Board
                             </button>
                         </li>
-                        <li
-                            className={`cursor-pointer text-red hover:opacity-[0.8]`}
-                        >
+                        <li className="cursor-pointer text-red hover:opacity-[0.8]">
                             <button
-                                className="font-inherit cursor-pointer border-none bg-transparent font-[inherit] text-[inherit] text-inherit transition-[var(--transition)]"
+                                className="font-inherit cursor-pointer border-none bg-transparent text-inherit transition-[var(--transition)]"
                                 type="button"
                                 onClick={() => {
                                     setIsDeleteOpen(true);

@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 interface FormFieldProps {
@@ -26,14 +27,14 @@ export default function FormField({
             <div className="inputWrapper">
                 {isTextArea ? (
                     <textarea
-                        className={`formTextarea ${error ? 'inputError' : ''}`}
+                        className={cn('formTextarea', error && 'inputError')}
                         id={labelName}
                         name={labelName}
                         {...textAreaProps}
                     />
                 ) : (
                     <input
-                        className={`formInput ${error ? 'inputError' : ''}`}
+                        className={cn('formInput', error && 'inputError')}
                         id={labelName}
                         name={labelName}
                         {...inputProps}

@@ -1,30 +1,36 @@
 import { useState } from 'react';
+import { router } from '@inertiajs/react';
 
 import ConfirmModal from '@/components/ui/confirm-modal';
 import type { ModalProps } from '@/types';
 import { useTaskModal } from '@/contexts/task-modal-context';
+import { destroy } from '@/actions/App/Http/Controllers/TaskController';
+import { useBoard } from '@/contexts/board-context';
 
 export default function DeleteTaskModal({ isOpen, onClose }: ModalProps) {
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [deleteError, setDeleteError] = useState(null);
-
+    const { activeBoard } = useBoard();
     const { activeTask } = useTaskModal();
 
-    async function handleDeleteBoard() {
-        // if (!activeBoard) return;
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
 
-        // setIsDeleting(true);
-        // setFormError(null);
+    async function handleDeleteTask() {
+        if (!activeTask) return;
 
-        // try {
-        //     // Add your deletion logic here
-        //     onClose();
-        // } catch (err) {
-        //     setFormError('Failed to delete board. Please try again.');
-        // } finally {
-        //     setIsDeleting(false);
-        // }
-        console.log('delete task');
+        setIsDeleting(true);
+        setDeleteError(null);
+
+        router.delete(destroy({ board: activeBoard.id, task: activeTask.id }), {
+            onSuccess: () => {
+                onClose();
+            },
+            onError: () => {
+                setDeleteError('Failed to delete task. Please try again.');
+            },
+            onFinish: () => {
+                setIsDeleting(false);
+            },
+        });
     }
 
     return (
@@ -37,7 +43,7 @@ export default function DeleteTaskModal({ isOpen, onClose }: ModalProps) {
             <section>
                 <p className="deleteText">
                     {`Are you sure you want to delete the "${activeTask?.title}" task and its subtasks? This action cannot be 
-          reversed.`}
+                    reversed.`}
                 </p>
 
                 {deleteError && (
@@ -49,10 +55,11 @@ export default function DeleteTaskModal({ isOpen, onClose }: ModalProps) {
                         type="button"
                         className="btn btnDanger"
                         disabled={isDeleting}
-                        onClick={handleDeleteBoard}
+                        onClick={handleDeleteTask}
                     >
                         {isDeleting ? 'Deleting...' : 'Delete'}
                     </button>
+
                     <button
                         type="button"
                         className="btn btnSecondary"

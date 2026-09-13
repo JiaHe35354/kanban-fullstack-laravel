@@ -19,6 +19,7 @@ interface TaskModalContextType {
     openTaskDetails: (task: Task) => void;
     openEditTask: (task?: Task) => void;
     openDeleteTask: (task?: Task) => void;
+    updateActiveTask: (updates: Partial<Task>) => void;
     closeTaskModal: () => void;
 }
 
@@ -56,6 +57,12 @@ export function TaskModalProvider({ children }: { children: ReactNode }) {
         setActiveModal('delete');
     };
 
+    const updateActiveTask = (updates: Partial<Task>) => {
+        setActiveTask((current) =>
+            current ? { ...current, ...updates } : current,
+        );
+    };
+
     const closeTaskModal = () => {
         setActiveTask(null);
         setActiveModal(null);
@@ -70,6 +77,7 @@ export function TaskModalProvider({ children }: { children: ReactNode }) {
             openTaskDetails,
             openEditTask,
             openDeleteTask,
+            updateActiveTask,
             closeTaskModal,
         }),
         [activeTask, activeModal, currentColumn, columns],

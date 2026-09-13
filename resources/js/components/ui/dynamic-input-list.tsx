@@ -1,4 +1,5 @@
 import IconCross from '@/components/icons/icon-cross';
+import { cn } from '@/lib/utils';
 
 export interface DynamicItem {
     id: string;
@@ -9,18 +10,22 @@ interface DynamicInputListProps {
     label: string;
     addButtonText: string;
     items: DynamicItem[];
+    errors?: Record<string, string>;
     onChange: (id: string, value: string) => void;
     onRemove: (id: string) => void;
     onAdd: () => void;
     maxItems?: number;
     disabled?: boolean;
     submitted?: boolean;
+    fieldName: string;
 }
 
 export default function DynamicInputList({
     label,
     addButtonText,
     items,
+    errors = {},
+    fieldName,
     onChange,
     onRemove,
     onAdd,
@@ -33,8 +38,16 @@ export default function DynamicInputList({
             <label className="formLabel">{label}</label>
 
             <div className="rowsWrapper">
-                {items.map((item) => {
-                    const isInvalid = submitted && !item.value.trim();
+                {items.map((item, index) => {
+                    const localError =
+                        submitted && !item.value.trim()
+                            ? "Can't be empty"
+                            : null;
+
+                    const serverError = errors[`${fieldName}.${index}`];
+
+                    const error = serverError ?? localError;
+                    const isInvalid = Boolean(error);
 
                     return (
                         <div key={item.id} className="formRow">
@@ -42,25 +55,27 @@ export default function DynamicInputList({
                                 <input
                                     type="text"
                                     value={item.value}
-                                    // disabled={disabled}
+                                    disabled={disabled}
                                     onChange={(e) =>
                                         onChange(item.id, e.target.value)
                                     }
-                                    className={`formInput ${
-                                        isInvalid ? 'inputError' : ''
-                                    }`}
+                                    className={cn(
+                                        'formInput',
+                                        isInvalid && 'inputError',
+                                    )}
                                 />
-                                {isInvalid && (
-                                    <p className="errorText">Can't be empty</p>
-                                )}
+                                {error && <p className="errorText">{error}</p>}
                             </div>
 
                             {items.length > 1 && (
                                 <button
                                     type="button"
-                                    // disabled={disabled}
+                                    disabled={disabled}
                                     onClick={() => onRemove(item.id)}
-                                    className={`formCloseBtn ${isInvalid ? 'formErrorBtn' : ''}`}
+                                    className={cn(
+                                        'formCloseBtn',
+                                        isInvalid && 'formErrorBtn',
+                                    )}
                                 >
                                     <IconCross />
                                 </button>
@@ -73,7 +88,7 @@ export default function DynamicInputList({
             {items.length < maxItems && (
                 <button
                     type="button"
-                    // disabled={disabled}
+                    disabled={disabled}
                     onClick={onAdd}
                     className="btn btnSecondary"
                 >

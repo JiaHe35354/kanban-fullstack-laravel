@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import { useBoard } from '@/contexts/board-context';
 import type { SharedProps } from '@/types';
 
+import AddColumnModal from './modals/add-column-modal';
 import Column from './column';
-import { useState } from 'react';
-import CreateColumnModal from './modals/create-column-modal';
 
 export default function ColumnList() {
     const { activeBoard } = useBoard();
@@ -14,7 +14,7 @@ export default function ColumnList() {
 
     return (
         <>
-            <CreateColumnModal
+            <AddColumnModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             />
@@ -24,7 +24,7 @@ export default function ColumnList() {
                     <Column key={column.id} column={column} />
                 ))}
 
-                {boards.length > 0 && (
+                {boards.length > 0 && activeBoard?.columns?.length < 5 && (
                     <li className="mt-[3rem] flex h-[80vh] w-[24rem] shrink-0 flex-col items-center justify-center rounded-[0.8rem] bg-tertiary pb-[5rem] tb:mt-[4rem] tb:w-[28rem]">
                         <button
                             className="font-inherit cursor-pointer border-none bg-transparent text-[2.4rem] font-bold text-muted transition-all duration-200 ease-in hover:text-main-purple"

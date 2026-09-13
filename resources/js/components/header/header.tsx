@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useBoard } from '@/contexts/board-context';
 
+import { cn, formatName } from '@/lib/utils';
 import IconChevronDown from '../icons/icon-chevron-down';
 import IconPlus from '../icons/icon-plus';
 import CreateTaskModal from '../task/modals/create-task-modal';
@@ -19,20 +20,6 @@ export default function Header({
     const { activeBoard } = useBoard();
 
     const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
-
-    // function handleOpenNewTask() {
-    //     newTaskModal.current.open();
-    // }
-
-    // function handleOpenEditBoard() {
-    //     editBoardModal.current.open();
-    // }
-
-    // function handleOpenDeleteBoard() {
-    //     if (!activeBoard) return;
-
-    //     deleteBoardModal.current.open(activeBoard.id);
-    // }
 
     return (
         <>
@@ -53,11 +40,16 @@ export default function Header({
                         className="flex min-w-0 items-center gap-[1rem] border-none bg-none font-[inherit] text-main"
                     >
                         <h1 className="ml-[1.2rem] max-w-[14rem] min-w-0 shrink truncate text-[1.8rem] font-bold min-[25em]:max-w-[18rem] min-[33.75em]:max-w-[25rem] tb:ml-0 tb:text-[2rem] lg:text-[2.4rem]">
-                            {activeBoard ? 'Platform Launch' : 'No board found'}
+                            {activeBoard
+                                ? formatName(activeBoard?.name)
+                                : 'No board found'}
                         </h1>
 
                         <IconChevronDown
-                            className={`transition-[var(--transition)] tb:hidden ${isSidebarOpen ? 'rotate-180' : ''}`}
+                            className={cn(
+                                'transition-[var(--transition)] tb:hidden',
+                                isSidebarOpen && 'rotate-180',
+                            )}
                         />
                     </button>
 
@@ -76,11 +68,7 @@ export default function Header({
                             </span>
                         </button>
 
-                        <HeaderMenuButton
-                        // error={error}
-                        // onOpenDelete={handleOpenDeleteBoard}
-                        // onOpenEdit={handleOpenEditBoard}
-                        />
+                        <HeaderMenuButton />
                     </div>
                 </div>
             </header>

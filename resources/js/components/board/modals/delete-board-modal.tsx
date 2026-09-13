@@ -1,30 +1,34 @@
 import { useState } from 'react';
+import { router } from '@inertiajs/react';
 
+import { destroy } from '@/actions/App/Http/Controllers/BoardController';
 import { useBoard } from '@/contexts/board-context';
 import ConfirmModal from '@/components/ui/confirm-modal';
 import type { ModalProps } from '@/types';
 
 export default function DeleteBoardModal({ isOpen, onClose }: ModalProps) {
     const { activeBoard } = useBoard();
+
     const [isDeleting, setIsDeleting] = useState(false);
     const [formError, setFormError] = useState<string | null>(null);
 
-    console.log(activeBoard);
-
-    async function handleDeleteBoard() {
+    function handleDeleteBoard() {
         if (!activeBoard) return;
 
         setIsDeleting(true);
         setFormError(null);
 
-        try {
-            // Add your deletion logic here
-            onClose();
-        } catch (err) {
-            setFormError('Failed to delete board. Please try again.');
-        } finally {
-            setIsDeleting(false);
-        }
+        router.delete(destroy(activeBoard.id), {
+            onSuccess: () => {
+                onClose();
+            },
+            onError: () => {
+                setFormError('Failed to delete board. Please try again.');
+            },
+            onFinish: () => {
+                setIsDeleting(false);
+            },
+        });
     }
 
     return (
@@ -36,7 +40,7 @@ export default function DeleteBoardModal({ isOpen, onClose }: ModalProps) {
         >
             <section>
                 <p className="deleteText">
-                    {`Are you sure you want to delete the "${activeBoard?.name}" board? This action will remove all columns and tasks and cannot be reversed.`}
+                    {`Are you sure you want to delete the "${activeBoard?.name}" board? This action will permanently remove the board, all its columns, tasks, and subtasks.`}
                 </p>
 
                 {formError && <p className="mb-2 formErrorText">{formError}</p>}

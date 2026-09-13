@@ -1,118 +1,139 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useEffect, useState } from 'react';
+import { useForm } from '@inertiajs/react';
 
 import Modal from '@/components/ui/modal';
 import FormField from '@/components/ui/form-field';
 import DynamicInputList, {
     type DynamicItem,
 } from '@/components/ui/dynamic-input-list';
+import type { ModalProps } from '@/types';
 import { useBoard } from '@/contexts/board-context';
 import StatusDropDown from '@/components/ui/status-drop-down';
-import type { ModalProps } from '@/types';
+import { store } from '@/actions/App/Http/Controllers/TaskController';
+
+interface CreateTaskFormData {
+    title: string;
+    description: string;
+    subtasks: string[];
+    column_id: number;
+}
 
 export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
     const { activeBoard } = useBoard();
-    const columns = activeBoard?.columns ?? [];
+    const columns = useMemo(() => activeBoard?.columns ?? [], [activeBoard]);
 
     const [submitted, setSubmitted] = useState(false);
-    const [formData, setFormData] = useState({
+    const [subtaskIds, setSubtaskIds] = useState<string[]>([
+        crypto.randomUUID(),
+    ]);
+
+    const form = useForm<CreateTaskFormData>({
         title: '',
         description: '',
-        subtasks: [{ id: crypto.randomUUID(), value: '' }] as DynamicItem[],
-        status: '',
+        subtasks: [''],
+        column_id: columns[0]?.id ?? 0,
     });
 
-    // Sync initial status when activeBoard columns load or update
+    const items: DynamicItem[] = form.data.subtasks.map((value, index) => ({
+        id: subtaskIds[index],
+        value,
+    }));
+
+    // Set the first column when the board/columns become available.
     useEffect(() => {
-        if (columns.length > 0 && !formData.status) {
-            setFormData((prev) => ({ ...prev, status: String(columns[0].id) }));
+        if (columns.length > 0 && !form.data.column_id) {
+            form.setData('column_id', columns[0].id);
         }
-    }, [columns, formData.status]);
+    }, [columns, form]);
 
-    const isTitleInvalid = !formData.title.trim();
-    const hasEmptySubtasks = formData.subtasks.some((s) => !s.value.trim());
-
-    const resetForm = () => {
-        setSubmitted(false);
-        setFormData({
-            title: '',
-            description: '',
-            subtasks: [{ id: crypto.randomUUID(), value: '' }],
-            status: columns[0]?.id ? String(columns[0].id) : '',
-        });
-    };
+    const selectedColumn =
+        columns.find((column) => column.id === form.data.column_id) ??
+        columns[0];
 
     const handleClose = () => {
-        resetForm();
+        if (form.processing) return;
+
+        form.reset();
+        form.clearErrors();
+
+        setSubmitted(false);
+        setSubtaskIds([crypto.randomUUID()]);
+
+        if (columns.length > 0) {
+            form.setData('column_id', columns[0].id);
+        }
+
         onClose();
     };
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData((prev) => ({ ...prev, title: e.target.value }));
+        form.setData('title', e.target.value);
+        form.clearErrors('title');
     };
 
     const handleDescriptionChange = (
         e: React.ChangeEvent<HTMLTextAreaElement>,
     ) => {
-        setFormData((prev) => ({ ...prev, description: e.target.value }));
+        form.setData('description', e.target.value);
+        form.clearErrors('description');
     };
 
     const handleAddSubtask = () => {
-        setFormData((prev) => ({
-            ...prev,
-            subtasks: [
-                ...prev.subtasks,
-                { id: crypto.randomUUID(), value: '' },
-            ],
-        }));
+        form.setData('subtasks', [...form.data.subtasks, '']);
+
+        setSubtaskIds((prev) => [...prev, crypto.randomUUID()]);
+
+        setSubmitted(false);
     };
 
     const handleUpdateSubtask = (id: string, value: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            subtasks: prev.subtasks.map((item) =>
-                item.id === id ? { ...item, value } : item,
-            ),
-        }));
+        const index = subtaskIds.indexOf(id);
+
+        if (index === -1) return;
+
+        const newSubtasks = [...form.data.subtasks];
+
+        newSubtasks[index] = value;
+
+        form.setData('subtasks', newSubtasks);
+        form.clearErrors(`subtasks.${index}`);
     };
 
     const handleRemoveSubtask = (id: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            subtasks: prev.subtasks.filter((item) => item.id !== id),
-        }));
+        const index = subtaskIds.indexOf(id);
+
+        if (index === -1) return;
+
+        const newSubtaskIds = subtaskIds.filter(
+            (subtaskId) => subtaskId !== id,
+        );
+        const newSubtasks = form.data.subtasks.filter(
+            (_, subtaskIndex) => subtaskIndex !== index,
+        );
+
+        setSubtaskIds(newSubtaskIds);
+        form.setData('subtasks', newSubtasks);
+        form.clearErrors();
     };
 
-    // const getErrorMessage = () => {
-    //     if (!submitted) return null;
-
-    //     if (isTitleInvalid) return "Can't be empty";
-
-    //     // if (isDuplicate) return 'Name already used';
-
-    //     return null;
-    // };
+    const isTitleInvalid = !form.data.title.trim();
+    const hasEmptySubtasks = form.data.subtasks.some((s) => !s.trim());
 
     const handleSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
         setSubmitted(true);
 
+        if (!activeBoard) return;
+
         if (isTitleInvalid || hasEmptySubtasks) return;
 
-        const payload = {
-            title: formData.title,
-            description: formData.description,
-            status: formData.status,
-            subtasks: formData.subtasks.map((s) => ({ title: s.value })),
-        };
-
-        // Dispatch backend action here
-
-        handleClose();
+        form.post(store({ board: activeBoard.id }).url, {
+            onSuccess: () => {
+                handleClose();
+            },
+        });
     };
-
-    const selectedColumn =
-        columns.find((c) => String(c.id) === formData.status) || columns[0];
 
     return (
         <Modal title="Add New Task" isOpen={isOpen} onClose={handleClose}>
@@ -120,60 +141,65 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
                 <FormField
                     label="Title"
                     labelName="title"
-                    error={
-                        submitted && isTitleInvalid ? "Can't be empty" : null
-                    }
+                    error={form.errors.title}
                     inputProps={{
-                        value: formData.title,
+                        value: form.data.title,
                         placeholder: 'e.g. Take coffee break',
                         onChange: handleTitleChange,
+                        disabled: form.processing,
                     }}
                 />
 
                 <FormField
                     label="Description"
                     labelName="description"
+                    error={form.errors.description}
                     isTextArea
-                    // error={getErrorMessage()}
                     textAreaProps={{
-                        value: formData.description,
+                        value: form.data.description,
                         placeholder:
                             "e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little.",
                         onChange: handleDescriptionChange,
                         rows: 4,
+                        disabled: form.processing,
                     }}
                 />
 
                 <DynamicInputList
                     label="Subtasks"
                     addButtonText="+ Add New Subtask"
-                    items={formData.subtasks}
+                    items={items}
+                    errors={form.errors}
                     submitted={submitted}
                     onChange={handleUpdateSubtask}
                     onRemove={handleRemoveSubtask}
                     onAdd={handleAddSubtask}
+                    maxItems={10}
+                    disabled={form.processing}
+                    fieldName="subtasks"
                 />
 
                 <div className="formControl">
-                    <label className="formLabel">Status</label>
+                    <label htmlFor="status" className="formLabel">
+                        Status
+                    </label>
 
                     <StatusDropDown
                         value={selectedColumn?.name ?? ''}
-                        options={columns.map((col) => ({
-                            id: String(col.id),
-                            name: col.name,
-                        }))}
-                        onChange={(statusId) =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                status: statusId,
-                            }))
-                        }
+                        options={columns}
+                        onChange={(columnId) => {
+                            form.setData('column_id', columnId);
+                        }}
+                        disabled={form.processing}
                     />
                 </div>
 
-                <button type="submit" className="btn btnPrimary">
-                    Create Task
+                <button
+                    type="submit"
+                    className="btn btnPrimary"
+                    disabled={form.processing}
+                >
+                    {form.processing ? 'Creating...' : 'Create Task'}
                 </button>
             </form>
         </Modal>

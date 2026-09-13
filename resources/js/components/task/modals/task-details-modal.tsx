@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { router } from '@inertiajs/react';
 
 import { useTaskModal } from '@/contexts/task-modal-context';
 import type { ModalProps } from '@/types';
@@ -8,6 +9,8 @@ import StatusDropDown from '@/components/ui/status-drop-down';
 import { handleDialogBackdropClick } from '@/util/dialog';
 import MenuButton from '@/components/ui/menu-button';
 import IconCross from '@/components/icons/icon-cross';
+import { updateStatus } from '@/actions/App/Http/Controllers/TaskController';
+import { useBoard } from '@/contexts/board-context';
 
 export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
     const [isLoading, setIsLoading] = useState(false);
@@ -30,28 +33,51 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
         }
     }, [isOpen]);
 
-    const { activeTask, columns, currentColumn, closeTaskModal } =
-        useTaskModal();
+    const { activeBoard } = useBoard();
+    const {
+        activeTask,
+        columns,
+        currentColumn,
+        updateActiveTask,
+        closeTaskModal,
+    } = useTaskModal();
 
     const { total, completed } = getSubtaskStats(activeTask?.subtasks);
 
-    async function handleStatusChange(newColumnId: number) {
-        if (!activeTask || newColumnId === currentColumn?.id) return;
+    function handleStatusChange(newColumnId: number) {
+        if (!activeTask || !activeBoard) return;
+
+        if (newColumnId === currentColumn?.id) return;
 
         setIsLoading(true);
         setError(null);
 
-        try {
-            // Call Inertia request or context method to update task column
-            // e.g. router.patch(`/tasks/${activeTask.id}`, { column_id: newColumnId })
-        } catch (err) {
-            setError('Failed to move task. Please try again.');
-        } finally {
-            setIsLoading(false);
-        }
+        router.patch(
+            updateStatus({ board: activeBoard.id, task: activeTask.id }).url,
+            {
+                column_id: newColumnId,
+            },
+            {
+                preserveScroll: true,
+
+                onSuccess: () => {
+                    updateActiveTask({
+                        column_id: newColumnId,
+                    });
+                },
+
+                onError: () => {
+                    setError('Failed to move task. Please try again.');
+                },
+
+                onFinish: () => {
+                    setIsLoading(false);
+                },
+            },
+        );
     }
 
-    async function handleToggleSubtask(subtaskId: number) {
+    function handleToggleSubtask(subtaskId: number) {
         if (!activeTask) return;
 
         setIsLoading(true);
