@@ -236,6 +236,11 @@
     @apply flex w-full items-center justify-stretch gap-[1.6rem];
 }
 
+/* AUTH FORM */
+@utility authLabel {
+    @apply mb-[0.6rem] text-[1.4rem] font-medium text-[var(--dark-grey)];
+}
+
 /* SUBTASKS */
 @utility checkbox {
     @apply grid h-[1.6rem] w-[1.6rem] cursor-pointer appearance-none place-content-center rounded-[0.2rem] border border-medium-grey-25 bg-background transition-[var(--transition)];

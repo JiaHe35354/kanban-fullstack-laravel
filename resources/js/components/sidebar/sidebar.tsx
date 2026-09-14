@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
-import { useBoard } from '@/contexts/board-context';
+import { Link, router } from '@inertiajs/react';
 
+import { useBoard } from '@/contexts/board-context';
 import CreateBoardModal from '@/components/board/modals/create-board-modal';
 import type { Board } from '@/types';
 import { cn, formatName } from '@/lib/utils';
 import { show } from '@/actions/App/Http/Controllers/BoardController';
+import { destroy } from '@/actions/App/Http/Controllers/LoginController';
 import IconBoard from '../icons/icon-board';
 import IconHideSidebar from '../icons/icon-hide-sidebar';
 import IconLogout from '../icons/icon-logout';
@@ -18,6 +19,10 @@ interface SidebarProps {
 export default function Sidebar({ boards, onHide }: SidebarProps) {
     const { activeBoard } = useBoard();
     const [isCreateBoardOpen, setIsCreateBoardOpen] = useState(false);
+
+    const handleLogout = () => {
+        router.post(destroy().url);
+    };
 
     return (
         <>
@@ -77,7 +82,10 @@ export default function Sidebar({ boards, onHide }: SidebarProps) {
                         </button>
                     )}
 
-                    <button className="mt-4 flex cursor-pointer items-center gap-4 border-none bg-transparent pl-[2.5rem] font-[inherit] text-[1.5rem] font-semibold text-main-purple transition-[var(--transition)] hover:text-purple-hover">
+                    <button
+                        onClick={handleLogout}
+                        className="mt-4 flex cursor-pointer items-center gap-4 border-none bg-transparent pl-[2.5rem] font-[inherit] text-[1.5rem] font-semibold text-main-purple transition-[var(--transition)] hover:text-purple-hover"
+                    >
                         <IconLogout className="h-[1.8rem] w-[1.8rem]" />{' '}
                         <span>Log out</span>
                     </button>

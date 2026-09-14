@@ -1,35 +1,17 @@
 import React, { useState } from 'react';
 import { usePage } from '@inertiajs/react';
 
+import Header from '@/components/header/Header';
 import Sidebar from '@/components/sidebar/sidebar';
 import IconShowSidebar from '@/components/icons/icon-show-sidebar';
 import type { SharedProps } from '@/types';
-import Header from '@/components/header/Header';
-import CreateBoardModal from '@/components/board/modals/create-board-modal';
 import { cn } from '@/lib/utils';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { boards } = usePage<SharedProps>().props;
 
-    // const modal = useRef();
-
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-
-    // function handleSelectBoard(boardId) {
-    //     selectBoard(boardId);
-
-    //     if (isMobile) setIsMobileSidebarOpen(false);
-    // }
-
-    // function handleOpenModal() {
-    //     if (isMobile) setIsMobileSidebarOpen(false);
-
-    //     //Wait for DOM update:
-    //     requestAnimationFrame(() => {
-    //         modal.current.open();
-    //     });
-    // }
 
     function handleHideSidebar() {
         setIsSidebarOpen(false);
@@ -42,34 +24,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     function handleHideMobileSidebar() {
         setIsMobileSidebarOpen(false);
     }
-
-    // const Spinner = (
-    //     <div className={classes.centerLoading}>
-    //         <div className={classes.spinnerWrapper}>
-    //             <div className="spinner"></div>
-    //             <p>Loading</p>
-    //         </div>
-    //     </div>
-    // );
-
-    // if (error && boards.length === 0) {
-    //     return (
-    //         <div className={classes.errorOverlay}>
-    //             <div className={classes.errorCard}>
-    //                 <h2>Oops! Something went wrong</h2>
-    //                 <p className={classes.text}>{error}</p>
-    //                 <button
-    //                     className="addBtn"
-    //                     onClick={() => {
-    //                         loadBoards();
-    //                     }}
-    //                 >
-    //                     Please Try Again
-    //                 </button>
-    //             </div>
-    //         </div>
-    //     );
-    // }
 
     return (
         <>
@@ -95,13 +49,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             isSidebarOpen ? 'sidebarOpen' : 'sidebarClose',
                         )}
                     >
-                        <Sidebar
-                            // onSelectBoard={handleSelectBoard}
-                            boards={boards}
-                            onHide={handleHideSidebar}
-                            // onOpenModal={handleOpenModal}
-                            // isMobile={isMobile}
-                        />
+                        <Sidebar boards={boards} onHide={handleHideSidebar} />
                     </div>
                 </aside>
 
@@ -123,21 +71,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         boards.length === 0 && 'flex justify-center',
                     )}
                 >
-                    {/* {error ? (
-                        <div className={classes.centerEmpty}>
-                            <div className={classes.emptyContent}>
-                                <h2>Board Load Failed</h2>
-                                <p className={classes.text}>{error}</p>
-                                <button
-                                    className="addBtn"
-                                    onClick={() => loadBoardData(activeBoardId)}
-                                >
-                                    Retry Loading Columns
-                                </button>
-                            </div>
-                        </div>
-                    ) : ( */}
-
                     {boards.length === 0 && (
                         <div className="flex items-center justify-center">
                             <div className="text-center">
@@ -145,10 +78,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                     There are no boards available. Create a new
                                     board to get started.
                                 </p>
-                                <button
-                                    className="addBtn"
-                                    // onClick={handleOpenModal}
-                                >
+                                <button className="addBtn">
                                     + Create New Board
                                 </button>
                             </div>
