@@ -6,12 +6,14 @@ import Sidebar from '@/components/sidebar/sidebar';
 import IconShowSidebar from '@/components/icons/icon-show-sidebar';
 import type { SharedProps } from '@/types';
 import { cn } from '@/lib/utils';
+import CreateBoardModal from '@/components/board/modals/create-board-modal';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { boards } = usePage<SharedProps>().props;
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+    const [isCreateBoardOpen, setIsCreateBoardOpen] = useState(false);
 
     function handleHideSidebar() {
         setIsSidebarOpen(false);
@@ -21,12 +23,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         setIsSidebarOpen(true);
     }
 
+    function handleOpenCreateBoard() {
+        setIsCreateBoardOpen(true);
+    }
+
     function handleHideMobileSidebar() {
         setIsMobileSidebarOpen(false);
     }
 
     return (
         <>
+            <CreateBoardModal
+                isOpen={isCreateBoardOpen}
+                onClose={() => setIsCreateBoardOpen(false)}
+            />
+
             <div
                 className={cn(
                     'grid h-screen grid-cols-1 grid-rows-[6.4rem_1fr] transition-[grid-template-columns] duration-300 ease-in tb:grid-rows-[8.2rem_1fr] lg:grid-rows-[9.7rem_1fr]',
@@ -36,6 +47,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 )}
             >
                 <Header
+                    boards={boards}
                     isSidebarOpen={isMobileSidebarOpen}
                     onToggleSidebar={() =>
                         setIsMobileSidebarOpen((prev) => !prev)
@@ -49,7 +61,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             isSidebarOpen ? 'sidebarOpen' : 'sidebarClose',
                         )}
                     >
-                        <Sidebar boards={boards} onHide={handleHideSidebar} />
+                        <Sidebar
+                            boards={boards}
+                            onHide={handleHideSidebar}
+                            onCreateBoard={handleOpenCreateBoard}
+                        />
                     </div>
                 </aside>
 
@@ -60,7 +76,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             onClick={handleHideMobileSidebar}
                         />
                         <div className="fixed top-[8.1rem] left-1/2 z-[1000] w-[26.4rem] -translate-x-1/2 fade-in overflow-hidden rounded-[0.8rem] bg-background">
-                            <Sidebar boards={boards} />
+                            <Sidebar
+                                boards={boards}
+                                onCreateBoard={handleOpenCreateBoard}
+                            />
                         </div>
                     </div>
                 )}
@@ -78,7 +97,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                     There are no boards available. Create a new
                                     board to get started.
                                 </p>
-                                <button className="addBtn">
+                                <button
+                                    onClick={handleOpenCreateBoard}
+                                    className="addBtn"
+                                >
                                     + Create New Board
                                 </button>
                             </div>

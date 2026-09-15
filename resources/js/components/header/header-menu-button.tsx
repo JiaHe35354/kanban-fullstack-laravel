@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { usePage } from '@inertiajs/react';
 
-import type { SharedProps } from '@/types';
 import DeleteBoardModal from '../board/modals/delete-board-modal';
 import EditBoardModal from '../board/modals/edit-board-modal';
 import IconVerticalEllipsis from '../icons/icon-vertical-ellipsis';
+import type { Board } from '../../types/index';
 
-export default function HeaderMenuButton() {
+interface HeaderMenuButtonProps {
+    boards: Board[];
+}
+
+export default function HeaderMenuButton({ boards }: HeaderMenuButtonProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
     const buttonRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLUListElement>(null);
-
-    const { boards = [] } = usePage<SharedProps>().props;
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -57,7 +58,7 @@ export default function HeaderMenuButton() {
                     aria-expanded={isMenuOpen}
                     aria-controls="board-options-menu"
                     onClick={() => setIsMenuOpen((prev) => !prev)}
-                    disabled={boards.length === 0}
+                    disabled={boards?.length === 0}
                     className="flex cursor-pointer items-center justify-center rounded-[10px] border-none bg-transparent px-[0.8rem] py-[1rem] transition-[var(--transition)] hover:bg-[rgba(99,95,199,0.3)] focus-visible:bg-[rgba(99,95,199,0.3)]"
                 >
                     <IconVerticalEllipsis className="text-muted" />

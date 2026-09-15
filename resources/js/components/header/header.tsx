@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useBoard } from '@/contexts/board-context';
 
+import type { Board } from '@/types';
 import { cn, formatName } from '@/lib/utils';
 import IconChevronDown from '../icons/icon-chevron-down';
 import IconPlus from '../icons/icon-plus';
@@ -9,11 +10,13 @@ import HeaderLogo from './header-logo';
 import HeaderMenuButton from './header-menu-button';
 
 interface HeaderProps {
+    boards: Board[];
     isSidebarOpen: boolean;
     onToggleSidebar: () => void;
 }
 
 export default function Header({
+    boards,
     isSidebarOpen,
     onToggleSidebar,
 }: HeaderProps) {
@@ -56,11 +59,9 @@ export default function Header({
                     <div className="flex shrink-0 items-center">
                         <button
                             type="button"
-                            className="plusBtn flex items-center justify-center tb:addBtn"
+                            className="font-inherit mr-[1.8rem] cursor-pointer rounded-[50px] border-none bg-main-purple px-[3rem] py-[1.5rem] text-[1.5rem] font-semibold text-white transition-[var(--transition)] hover:enabled:bg-purple-hover disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-main-purple-25"
                             onClick={() => setIsCreateTaskModalOpen(true)}
-                            // disabled={
-                            //     !activeBoard || error || boards.length === 0
-                            // }
+                            disabled={!activeBoard || boards.length === 0}
                         >
                             <IconPlus className="block h-[1.2rem] w-[1.2rem] tb:hidden" />
                             <span className="hidden tb:inline">
@@ -68,7 +69,7 @@ export default function Header({
                             </span>
                         </button>
 
-                        <HeaderMenuButton />
+                        <HeaderMenuButton boards={boards} />
                     </div>
                 </div>
             </header>
