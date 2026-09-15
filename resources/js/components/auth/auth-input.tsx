@@ -26,7 +26,7 @@ export default function AuthInput({
             </label>
 
             <input
-                className="formInput"
+                className="authInput"
                 id={id}
                 type={type}
                 autoComplete={autoComplete}

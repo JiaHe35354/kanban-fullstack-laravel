@@ -241,6 +241,10 @@
     @apply mb-[0.6rem] text-[1.4rem] font-medium text-[var(--dark-grey)];
 }
 
+@utility authInput {
+    @apply w-full cursor-pointer rounded-[0.5rem] border-[1.6px] border-solid border-medium-grey-25 bg-white px-[1.5rem] py-[0.5rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-[var(--dark-grey)] transition-[var(--transition)] placeholder:opacity-50 hover:border-main-purple focus:border-main-purple focus:outline-main-purple;
+}
+
 /* SUBTASKS */
 @utility checkbox {
     @apply grid h-[1.6rem] w-[1.6rem] cursor-pointer appearance-none place-content-center rounded-[0.2rem] border border-medium-grey-25 bg-background transition-[var(--transition)];
@@ -312,32 +316,7 @@
     @apply bg-red text-white hover:bg-red-hover disabled:cursor-not-allowed disabled:bg-red-hover disabled:opacity-70;
 }
 
-/* LOADING */
-@utility authLoadingScreen {
-    @apply flex h-screen flex-col items-center justify-center gap-[1rem] bg-[var(--light-grey)] text-[1.8rem] text-[var(--very-dark-grey)];
-}
-
-@utility spinner {
-    @apply h-[4rem] w-[4rem] animate-spin rounded-full border-4 border-solid border-[var(--lines-light)] border-t-main-purple;
-}
-
 /* UTILITIES */
-@utility visuallyHidden {
-    @apply not-sr-only tb:sr-only;
-}
-
-@utility mb-2 {
-    @apply mb-[2rem];
-}
-
-@utility mt-2 {
-    @apply mt-[2rem];
-}
-
-@utility focusRing {
-    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main-purple;
-}
-
 @utility bg-tertiary {
     background-image: var(--background-tertiary);
 }

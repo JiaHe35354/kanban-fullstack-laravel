@@ -108,7 +108,7 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
             // }}
         >
             <header className="mt-[2rem] mb-[2.6rem] flex items-center justify-between gap-[2.5rem] tb:mt-0">
-                <h4 className="color-main text-[1.8rem] font-bold break-words">
+                <h4 className="text-[1.8rem] font-bold break-words text-main">
                     {activeTask?.title}
                 </h4>
 

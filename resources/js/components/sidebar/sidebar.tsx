@@ -8,6 +8,7 @@ import { destroy } from '@/actions/App/Http/Controllers/LoginController';
 import IconBoard from '../icons/icon-board';
 import IconHideSidebar from '../icons/icon-hide-sidebar';
 import IconLogout from '../icons/icon-logout';
+import ThemeToggle from '../ui/theme-toggle';
 
 interface SidebarProps {
     boards: Board[];
@@ -69,7 +70,7 @@ export default function Sidebar({
             </div>
 
             <div className="mt-auto shrink-0 pt-[2rem]">
-                {/* <ThemeToggle /> */}
+                <ThemeToggle />
 
                 {onHide && (
                     <button
@@ -83,7 +84,7 @@ export default function Sidebar({
                 <button
                     onClick={handleLogout}
                     disabled={processing}
-                    className="disabled:text--main-purple-25 mt-4 flex cursor-pointer items-center gap-4 border-none bg-transparent pl-[2.5rem] font-[inherit] text-[1.5rem] font-semibold text-main-purple transition-[var(--transition)] hover:text-purple-hover disabled:cursor-not-allowed"
+                    className="mt-4 flex cursor-pointer items-center gap-4 border-none bg-transparent pl-[2.5rem] font-[inherit] text-[1.5rem] font-semibold text-main-purple transition-[var(--transition)] hover:text-purple-hover disabled:cursor-not-allowed disabled:text-main-purple-25"
                 >
                     <IconLogout className="h-[1.8rem] w-[1.8rem]" />{' '}
                     <span>{processing ? 'Logging out' : 'Log out'}</span>

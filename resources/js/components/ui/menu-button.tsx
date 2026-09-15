@@ -69,7 +69,7 @@ export default function MenuButton({ disabled }: MenuButtonProps) {
                 onClick={toggleMenu}
                 disabled={disabled}
             >
-                <IconVerticalEllipsis />
+                <IconVerticalEllipsis className="text-muted" />
             </button>
 
             <ul

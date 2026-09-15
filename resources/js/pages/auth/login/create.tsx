@@ -72,7 +72,7 @@ export default function Login() {
 
             <button
                 type="button"
-                className="mt-6 w-full btn btnSecondary text-[1.5rem] sm:mt-8"
+                className="mt-6 w-full btn bg-main-purple-10 text-[1.5rem] text-main-purple hover:bg-main-purple-25 disabled:cursor-not-allowed sm:mt-8"
                 onClick={handleDemoLogin}
                 disabled={demoForm.processing}
             >

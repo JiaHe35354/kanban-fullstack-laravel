@@ -1,11 +1,10 @@
-// import { useContext } from 'react';
-// import { ThemeContext } from '@/context/ThemeContext';
+import { useTheme } from '@/contexts/theme-context';
 
 export default function HeaderLogo() {
-    // const { theme } = useContext(ThemeContext);
+    const { theme } = useTheme();
 
-    // const desktopLogo =
-    //     theme === 'light' ? '/assets/logo-dark.svg' : '/assets/logo-light.svg';
+    const desktopLogo =
+        theme === 'light' ? '/assets/logo-dark.svg' : '/assets/logo-light.svg';
 
     return (
         <div className="w-[2.5rem] pl-[3rem] tb:w-[23rem] lg:w-[29.9rem] [&_img]:block">
@@ -13,7 +12,7 @@ export default function HeaderLogo() {
                 <source
                     width={152}
                     height={25}
-                    srcSet="/assets/logo-dark.svg"
+                    srcSet={desktopLogo}
                     media="(min-width: 46.25em)"
                 />
                 <img
