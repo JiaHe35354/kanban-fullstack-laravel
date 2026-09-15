@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,19 @@ use Inertia\Response;
 
 class LoginController extends Controller
 {
+    public function demo (Request $request): RedirectResponse
+    {
+        $user = User::where('email', 'test@example.com')->firstOrFail();
+
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()
+            ->intended(route('boards.index'))
+            ->with('success', 'You are now logged in with the demo account.');
+    }
+
     public function create(): Response
     {
         return Inertia::render('auth/login/create');

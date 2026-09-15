@@ -3,12 +3,22 @@ import { useForm } from '@inertiajs/react';
 
 import AuthLayout from '@/layouts/auth-layout';
 import { store } from '@/actions/App/Http/Controllers/LoginController';
+import { create } from '@/actions/App/Http/Controllers/RegisterController';
+import { demo } from '@/actions/App/Http/Controllers/LoginController';
+import AuthFooter from '@/components/auth/auth-footer';
+import AuthInput from '@/components/auth/auth-input';
 
 export default function Login() {
     const form = useForm({
         email: '',
         password: '',
     });
+
+    const demoForm = useForm();
+
+    const handleDemoLogin = () => {
+        demoForm.post(demo().url);
+    };
 
     const handleSubtmit = (e: React.SubmitEvent) => {
         e.preventDefault();
@@ -31,49 +41,25 @@ export default function Login() {
                     </p>
                 </div>
 
-                <div className="formControl">
-                    <label htmlFor="email" className="authLabel">
-                        Email
-                    </label>
+                <AuthInput
+                    id="email"
+                    label="Email"
+                    type="email"
+                    autoComplete="email"
+                    value={form.data.email}
+                    error={form.errors.email}
+                    onChange={(value) => form.setData('email', value)}
+                />
 
-                    <div className="inputWrapper">
-                        <input
-                            className="formInput"
-                            id="email"
-                            type="email"
-                            autoComplete="email"
-                            value={form.data.email}
-                            onChange={(e) =>
-                                form.setData('email', e.target.value)
-                            }
-                        />
-                        {form.errors.email && (
-                            <p className="errorText">{form.errors.email}</p>
-                        )}
-                    </div>
-                </div>
-
-                <div className="formControl">
-                    <label htmlFor="password" className="authLabel">
-                        Password
-                    </label>
-
-                    <div className="inputWrapper">
-                        <input
-                            className="formInput"
-                            id="password"
-                            type="password"
-                            autoComplete="current-password"
-                            value={form.data.password}
-                            onChange={(e) =>
-                                form.setData('password', e.target.value)
-                            }
-                        />
-                        {form.errors.password && (
-                            <p className="errorText">{form.errors.password}</p>
-                        )}
-                    </div>
-                </div>
+                <AuthInput
+                    id="password"
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                    value={form.data.password}
+                    error={form.errors.password}
+                    onChange={(value) => form.setData('password', value)}
+                />
 
                 <button
                     type="submit"
@@ -87,19 +73,17 @@ export default function Login() {
             <button
                 type="button"
                 className="mt-6 w-full btn btnSecondary text-[1.5rem] sm:mt-8"
+                onClick={handleDemoLogin}
+                disabled={demoForm.processing}
             >
-                Quick Demo
+                {demoForm.processing ? 'Loading Demo...' : 'Quick Demo'}
             </button>
 
-            <p className="mt-8 text-center text-[1.5rem] text-medium-grey">
-                Don't have an account?{' '}
-                <button
-                    className="hover:color-purple-hover focus:color-purple-hover border-none bg-transparent font-bold text-main-purple transition-all hover:underline focus:underline focus:outline-none"
-                    type="button"
-                >
-                    Sign up
-                </button>
-            </p>
+            <AuthFooter
+                question="Don't have an account?"
+                linkText="Sign up"
+                href={create().url}
+            />
         </AuthLayout>
     );
 }
