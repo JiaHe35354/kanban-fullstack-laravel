@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Link, router } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 
 import { useBoard } from '@/contexts/board-context';
 import type { Board } from '@/types';
@@ -23,8 +22,10 @@ export default function Sidebar({
 }: SidebarProps) {
     const { activeBoard } = useBoard();
 
+    const { post, processing } = useForm();
+
     const handleLogout = () => {
-        router.post(destroy().url);
+        post(destroy().url);
     };
 
     return (
@@ -81,10 +82,11 @@ export default function Sidebar({
 
                 <button
                     onClick={handleLogout}
-                    className="mt-4 flex cursor-pointer items-center gap-4 border-none bg-transparent pl-[2.5rem] font-[inherit] text-[1.5rem] font-semibold text-main-purple transition-[var(--transition)] hover:text-purple-hover"
+                    disabled={processing}
+                    className="disabled:text--main-purple-25 mt-4 flex cursor-pointer items-center gap-4 border-none bg-transparent pl-[2.5rem] font-[inherit] text-[1.5rem] font-semibold text-main-purple transition-[var(--transition)] hover:text-purple-hover disabled:cursor-not-allowed"
                 >
                     <IconLogout className="h-[1.8rem] w-[1.8rem]" />{' '}
-                    <span>Log out</span>
+                    <span>{processing ? 'Logging out' : 'Log out'}</span>
                 </button>
             </div>
         </nav>
