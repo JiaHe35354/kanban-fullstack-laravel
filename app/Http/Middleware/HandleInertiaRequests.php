@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,11 +37,12 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+
             'auth' => [
                 'user' => $request->user(),
             ],
 
-            'boards' => fn() => User::first()?->boards()
+            'boards' => fn() => $request->user()?->boards()
                 ->select('id', 'name')
                 ->orderBy('created_at')
                 ->get() ?? [],
