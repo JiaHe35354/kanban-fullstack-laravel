@@ -34,7 +34,6 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         subtasks: [''],
         column_id: columns[0]?.id ?? 0,
     });
-    console.log(form.data.column_id);
 
     const items: DynamicItem[] = form.data.subtasks.map((value, index) => ({
         id: subtaskIds[index],
@@ -118,7 +117,7 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         form.clearErrors();
     };
 
-    const isTitleInvalid = !form.data.title.trim();
+    const isTitleEmpty = !form.data.title.trim();
     const hasEmptySubtasks = form.data.subtasks.some((s) => !s.trim());
 
     const handleSubmit = (e: React.SubmitEvent) => {
@@ -127,7 +126,7 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
 
         if (!activeBoard) return;
 
-        if (isTitleInvalid || hasEmptySubtasks) return;
+        if (isTitleEmpty || hasEmptySubtasks) return;
 
         form.post(store({ board: activeBoard.id }).url, {
             onSuccess: () => {
@@ -142,7 +141,12 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
                 <FormField
                     label="Title"
                     labelName="title"
-                    error={form.errors.title}
+                    error={
+                        form.errors.title ||
+                        (submitted && isTitleEmpty
+                            ? 'The title field is required.'
+                            : null)
+                    }
                     inputProps={{
                         value: form.data.title,
                         placeholder: 'e.g. Take coffee break',

@@ -12,13 +12,13 @@ import ThemeToggle from '../ui/theme-toggle';
 
 interface SidebarProps {
     boards: Board[];
-    onCreateBoard: () => void;
+    onOpenCreateBoard: () => void;
     onHide?: () => void;
 }
 
 export default function Sidebar({
     boards,
-    onCreateBoard,
+    onOpenCreateBoard,
     onHide,
 }: SidebarProps) {
     const { activeBoard } = useBoard();
@@ -62,7 +62,7 @@ export default function Sidebar({
                 </ul>
 
                 <button
-                    onClick={onCreateBoard}
+                    onClick={onOpenCreateBoard}
                     className="mt-[1.5rem] mb-[3.2rem] flex cursor-pointer items-center gap-[1rem] border-none bg-transparent pl-[3rem] font-[inherit] text-[1.5rem] font-bold text-main-purple transition-[var(--transition)] hover:text-purple-hover min-[46.25em]:mb-0"
                 >
                     <IconBoard className="shrink-0" />+ Create New Board

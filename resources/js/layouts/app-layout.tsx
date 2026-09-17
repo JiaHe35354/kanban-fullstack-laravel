@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 
@@ -77,7 +77,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         <Sidebar
                             boards={boards}
                             onHide={handleHideSidebar}
-                            onCreateBoard={handleOpenCreateBoard}
+                            onOpenCreateBoard={handleOpenCreateBoard}
                         />
                     </div>
                 </aside>
@@ -91,7 +91,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         <div className="fixed top-[8.1rem] left-1/2 z-[1000] w-[26.4rem] -translate-x-1/2 fade-in overflow-hidden rounded-[0.8rem] bg-background">
                             <Sidebar
                                 boards={boards}
-                                onCreateBoard={handleOpenCreateBoard}
+                                onOpenCreateBoard={() => {
+                                    handleOpenCreateBoard();
+                                    handleHideMobileSidebar();
+                                }}
                             />
                         </div>
                     </div>

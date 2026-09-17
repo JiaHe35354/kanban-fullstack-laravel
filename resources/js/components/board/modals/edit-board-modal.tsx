@@ -131,7 +131,12 @@ export default function EditBoardModal({ isOpen, onClose }: ModalProps) {
                 <FormField
                     label="Board Name"
                     labelName="boardName"
-                    error={form.errors.name}
+                    error={
+                        form.errors.name ||
+                        (submitted && !form.data.name.trim()
+                            ? 'The name field is required.'
+                            : null)
+                    }
                     inputProps={{
                         type: 'text',
                         value: form.data.name,

@@ -44,7 +44,7 @@ export default function DynamicInputList({
                             ? "Can't be empty"
                             : null;
 
-                    const serverError = errors[`${fieldName}.${index}`];
+                    const serverError = errors[`{fieldName}.${index}`];
 
                     const error = serverError ?? localError;
                     const isInvalid = Boolean(error);

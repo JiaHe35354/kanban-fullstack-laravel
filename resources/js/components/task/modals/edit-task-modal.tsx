@@ -149,7 +149,7 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
         onClose();
     };
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    const handleSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
         setSubmitted(true);
 
@@ -183,7 +183,12 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
                 <FormField
                     label="Title"
                     labelName="title"
-                    error={form.errors.title}
+                    error={
+                        form.errors.title ||
+                        (submitted && isTitleEmpty
+                            ? 'The title field is required.'
+                            : null)
+                    }
                     inputProps={{
                         type: 'text',
                         value: form.data.title,
