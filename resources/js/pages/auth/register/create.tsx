@@ -79,7 +79,7 @@ export default function Register() {
 
                 <button
                     type="submit"
-                    className="mt-2 btn btnPrimary text-[1.5rem] sm:mt-6"
+                    className="authBtn"
                     disabled={form.processing}
                 >
                     {form.processing ? 'Creating Account...' : 'Create Account'}

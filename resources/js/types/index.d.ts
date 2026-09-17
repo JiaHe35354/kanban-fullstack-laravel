@@ -43,6 +43,11 @@ export interface BoardContextType {
     activeBoard: Board | null;
 }
 
+export interface FlashMessages {
+    success?: string | null;
+    error?: string | null;
+}
+
 export interface SharedProps extends PageProps {
     auth: {
         user: {
@@ -52,6 +57,7 @@ export interface SharedProps extends PageProps {
         } | null;
     };
     boards: Board[];
+    flash: FlashMessages;
     [key: string]: unknown;
 }
 

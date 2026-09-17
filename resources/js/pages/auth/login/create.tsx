@@ -63,7 +63,7 @@ export default function Login() {
 
                 <button
                     type="submit"
-                    className="mt-2 btn btnPrimary text-[1.5rem] sm:mt-6"
+                    className="authBtn"
                     disabled={form.processing}
                 >
                     {form.processing ? 'Logging in...' : 'Log In'}
@@ -72,7 +72,7 @@ export default function Login() {
 
             <button
                 type="button"
-                className="mt-6 w-full btn bg-main-purple-10 text-[1.5rem] text-main-purple hover:bg-main-purple-25 disabled:cursor-not-allowed sm:mt-8"
+                className="mt-6 w-full cursor-pointer rounded-2xl border border-main-purple bg-transparent px-[3rem] py-[0.8rem] font-sans text-[1.5rem] font-bold text-main-purple focus:bg-main-purple-10 focus:outline-none disabled:cursor-not-allowed sm:mt-8"
                 onClick={handleDemoLogin}
                 disabled={demoForm.processing}
             >

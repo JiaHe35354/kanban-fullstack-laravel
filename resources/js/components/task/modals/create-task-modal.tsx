@@ -34,6 +34,7 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         subtasks: [''],
         column_id: columns[0]?.id ?? 0,
     });
+    console.log(form.data.column_id);
 
     const items: DynamicItem[] = form.data.subtasks.map((value, index) => ({
         id: subtaskIds[index],
@@ -45,7 +46,7 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         if (columns.length > 0 && !form.data.column_id) {
             form.setData('column_id', columns[0].id);
         }
-    }, [columns, form]);
+    }, [columns, form.data.column_id]);
 
     const selectedColumn =
         columns.find((column) => column.id === form.data.column_id) ??

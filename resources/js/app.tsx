@@ -3,7 +3,6 @@ import '../css/app.css';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot, hydrateRoot } from 'react-dom/client';
-import { ThemeProvider } from './contexts/theme-context';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Kanban App';
 
@@ -23,11 +22,7 @@ createInertiaApp({
             if (el.hasChildNodes()) {
                 hydrateRoot(el, <App {...props} />);
             } else {
-                createRoot(el).render(
-                    <ThemeProvider>
-                        <App {...props} />
-                    </ThemeProvider>,
-                );
+                createRoot(el).render(<App {...props} />);
             }
         }
     },

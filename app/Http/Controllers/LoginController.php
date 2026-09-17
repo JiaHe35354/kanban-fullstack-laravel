@@ -21,8 +21,7 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         return redirect()
-            ->intended(route('boards.index'))
-            ->with('success', 'You are now logged in with the demo account.');
+            ->intended(route('boards.index'));
     }
 
     public function create(): Response
@@ -45,7 +44,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('boards.index'))->with('success', 'You are now logged in.');
+        return redirect()->intended(route('boards.index'));
     }
 
     public function destroy(Request $request)

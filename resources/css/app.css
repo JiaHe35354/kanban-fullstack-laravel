@@ -245,6 +245,10 @@
     @apply w-full cursor-pointer rounded-[0.5rem] border-[1.6px] border-solid border-medium-grey-25 bg-white px-[1.5rem] py-[0.5rem] font-[inherit] text-[1.3rem] leading-[1.9] font-medium text-[var(--dark-grey)] transition-[var(--transition)] placeholder:opacity-50 hover:border-main-purple focus:border-main-purple focus:outline-main-purple;
 }
 
+@utility authBtn {
+    @apply mt-2 w-full cursor-pointer rounded-2xl bg-main-purple px-[3rem] py-[1rem] font-sans text-[1.5rem] font-bold text-main-purple text-white transition-[var(--transition)] hover:bg-purple-hover focus:bg-purple-hover focus:outline-none disabled:cursor-not-allowed disabled:bg-purple-hover disabled:opacity-70 sm:mt-6;
+}
+
 /* SUBTASKS */
 @utility checkbox {
     @apply grid h-[1.6rem] w-[1.6rem] cursor-pointer appearance-none place-content-center rounded-[0.2rem] border border-medium-grey-25 bg-background transition-[var(--transition)];

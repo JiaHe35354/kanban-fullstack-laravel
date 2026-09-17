@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
 
+import Toaster from '@/components/ui/Toaster';
 import Header from '@/components/header/Header';
 import Sidebar from '@/components/sidebar/sidebar';
-import IconShowSidebar from '@/components/icons/icon-show-sidebar';
 import type { SharedProps } from '@/types';
 import { cn } from '@/lib/utils';
 import CreateBoardModal from '@/components/board/modals/create-board-modal';
+import EmptyBoard from '@/components/board/empty-board';
+import ShowSidebar from '@/components/ui/show-sidebar';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-    const { boards } = usePage<SharedProps>().props;
+    const { boards, flash } = usePage<SharedProps>().props;
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [isCreateBoardOpen, setIsCreateBoardOpen] = useState(false);
+
+    useEffect(() => {
+        if (flash.success) {
+            toast(flash.success);
+        }
+
+        if (flash.error) {
+            toast(flash.error);
+        }
+    }, [flash.success, flash.error]);
 
     function handleHideSidebar() {
         setIsSidebarOpen(false);
@@ -91,33 +104,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     )}
                 >
                     {boards.length === 0 && (
-                        <div className="flex items-center justify-center">
-                            <div className="text-center">
-                                <p className="mb-[3.2rem] text-[1.8rem] font-semibold text-muted">
-                                    There are no boards available. Create a new
-                                    board to get started.
-                                </p>
-                                <button
-                                    onClick={handleOpenCreateBoard}
-                                    className="addBtn"
-                                >
-                                    + Create New Board
-                                </button>
-                            </div>
-                        </div>
+                        <EmptyBoard onOpenCreateBoard={handleOpenCreateBoard} />
                     )}
 
                     {boards.length > 0 && children}
 
                     {!isSidebarOpen && (
-                        <button
-                            className="showBtn hidden tb:block"
-                            onClick={handleShowSidebar}
-                        >
-                            <IconShowSidebar className="absolute top-1/2 left-1/2 -translate-1/2 text-white" />
-                        </button>
+                        <ShowSidebar onShowSidebar={handleShowSidebar} />
                     )}
                 </main>
+
+                <Toaster />
             </div>
         </>
     );

@@ -46,6 +46,11 @@ class HandleInertiaRequests extends Middleware
                 ->select('id', 'name')
                 ->orderBy('created_at')
                 ->get() ?? [],
+            
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+            ],
         ];
     }
 }
