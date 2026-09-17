@@ -27,10 +27,13 @@ export default function StatusDropDown({
         top: number;
         left: number;
         width: number;
+        maxHeight: number;
+        placement: 'top' | 'bottom';
     } | null>(null);
 
     const buttonRef = useRef<HTMLButtonElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {
@@ -50,17 +53,45 @@ export default function StatusDropDown({
             document.removeEventListener('mousedown', handleClickOutside);
     }, [menuOpen]);
 
+    useEffect(() => {
+        if (!menuOpen || !buttonRef.current || !dropdownRef.current) {
+            return;
+        }
+
+        const button = buttonRef.current.getBoundingClientRect();
+        const dropdown = dropdownRef.current.getBoundingClientRect();
+
+        const gap = 10;
+        const padding = 16;
+
+        const spaceBelow = window.innerHeight - button.bottom - gap - padding;
+
+        const spaceAbove = button.top - gap - padding;
+
+        const shouldOpenAbove =
+            dropdown.height > spaceBelow && spaceAbove > spaceBelow;
+
+        if (shouldOpenAbove) {
+            setDropdownPos({
+                top: button.top - gap,
+                left: button.left,
+                width: button.width,
+                maxHeight: spaceAbove,
+                placement: 'top',
+            });
+        } else {
+            setDropdownPos({
+                top: button.bottom + gap,
+                left: button.left,
+                width: button.width,
+                maxHeight: spaceBelow,
+                placement: 'bottom',
+            });
+        }
+    }, [menuOpen, options.length]);
+
     function toggleMenu() {
         if (disabled || !buttonRef.current) return;
-
-        const rect = buttonRef.current.getBoundingClientRect();
-        const dropdownOffset = 10;
-
-        setDropdownPos({
-            top: rect.bottom + dropdownOffset,
-            left: rect.left,
-            width: rect.width,
-        });
 
         setMenuOpen((prev) => !prev);
     }
@@ -87,14 +118,23 @@ export default function StatusDropDown({
                 </span>
             </button>
 
-            {!disabled && menuOpen && dropdownPos && (
+            {!disabled && menuOpen && (
                 <ul
-                    className="pointer-events-auto fixed z-[1000] flex list-none flex-col gap-[1.5rem] rounded-[0.5rem] bg-background p-[1.8rem_1.5rem] text-[1.3rem] font-medium text-muted shadow-[0_-1px_5px_rgba(130,143,163,0.2)]"
+                    ref={dropdownRef}
+                    className="pointer-events-auto fixed z-[1000] flex list-none flex-col gap-[1.5rem] overflow-y-auto rounded-[0.5rem] bg-background p-[1.8rem_1.5rem] text-[1.3rem] font-medium text-muted shadow-[0_-1px_5px_rgba(130,143,163,0.2)] [&::-webkit-scrollbar]:w-[4px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-medium-grey"
                     onClick={(e) => e.stopPropagation()}
                     style={{
-                        top: dropdownPos.top,
-                        left: dropdownPos.left,
-                        width: dropdownPos.width,
+                        top:
+                            dropdownPos?.placement === 'top'
+                                ? undefined
+                                : dropdownPos?.top,
+                        bottom:
+                            dropdownPos?.placement === 'top'
+                                ? window.innerHeight - (dropdownPos?.top ?? 0)
+                                : undefined,
+                        left: dropdownPos?.left,
+                        width: dropdownPos?.width,
+                        maxHeight: dropdownPos?.maxHeight,
                     }}
                 >
                     {options.map((option) => (

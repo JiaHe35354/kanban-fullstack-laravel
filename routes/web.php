@@ -4,6 +4,7 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
       [TaskController::class, 'updateStatus']
     )->name('tasks.update-status');
     Route::delete('/boards/{board}/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+    Route::post('/boards/{board}/subtasks/{subtask}/toggle', SubtaskController::class)->name('subtasks.toggle');
 
     Route::post('/auth/logout', [LoginController::class, 'destroy']);
 

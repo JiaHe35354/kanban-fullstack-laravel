@@ -11,6 +11,7 @@ import MenuButton from '@/components/ui/menu-button';
 import IconCross from '@/components/icons/icon-cross';
 import { updateStatus } from '@/actions/App/Http/Controllers/TaskController';
 import { useBoard } from '@/contexts/board-context';
+import SubtaskController from '@/actions/App/Http/Controllers/SubtaskController';
 
 export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
     const [isLoading, setIsLoading] = useState(false);
@@ -78,18 +79,42 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
     }
 
     function handleToggleSubtask(subtaskId: number) {
-        if (!activeTask) return;
+        if (!activeTask || !activeBoard) return;
 
         setIsLoading(true);
         setError(null);
 
-        try {
-            // Call Inertia request or context method to toggle subtask completion
-        } catch (err) {
-            setError('Failed to update subtask.');
-        } finally {
-            setIsLoading(false);
-        }
+        router.post(
+            SubtaskController({
+                board: activeBoard.id,
+                subtask: subtaskId,
+            }).url,
+            {},
+            {
+                preserveScroll: true,
+
+                onSuccess: () => {
+                    updateActiveTask({
+                        subtasks: activeTask.subtasks?.map((subtask) =>
+                            subtask.id === subtaskId
+                                ? {
+                                      ...subtask,
+                                      is_completed: !subtask.is_completed,
+                                  }
+                                : subtask,
+                        ),
+                    });
+                },
+
+                onError: () => {
+                    setError('Failed to update subtask. Please try again.');
+                },
+
+                onFinish: () => {
+                    setIsLoading(false);
+                },
+            },
+        );
     }
 
     if (!mounted) return null;
@@ -108,7 +133,7 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
             // }}
         >
             <header className="mt-[2rem] mb-[2.6rem] flex items-center justify-between gap-[2.5rem] tb:mt-0">
-                <h4 className="text-[1.8rem] font-bold break-words text-main">
+                <h4 className="text-[1.8rem] font-bold break-all text-main">
                     {activeTask?.title}
                 </h4>
 
