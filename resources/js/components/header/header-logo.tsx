@@ -7,7 +7,7 @@ export default function HeaderLogo() {
         theme === 'light' ? '/assets/logo-dark.svg' : '/assets/logo-light.svg';
 
     return (
-        <div className="w-[2.5rem] pl-[3rem] tb:w-[23rem] lg:w-[29.9rem] [&_img]:block">
+        <div className="w-[2.5rem] pl-[3rem] tb:w-[25.9rem] lg:w-[29.9rem] [&_img]:block">
             <picture>
                 <source
                     width={152}

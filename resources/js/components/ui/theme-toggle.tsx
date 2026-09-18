@@ -19,10 +19,7 @@ export default function ThemeToggle() {
                 <span className="sr-only">Light theme</span>
             </label>
 
-            <div
-                className="group relative h-[2rem] cursor-pointer"
-                data-theme={theme}
-            >
+            <div className="group relative h-[2rem]" data-theme={theme}>
                 <div className='"absolute opacity-0" top-[0.1rem] left-[0.1rem] flex gap-[0.2rem]'>
                     <input
                         type="radio"

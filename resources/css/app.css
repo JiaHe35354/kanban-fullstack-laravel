@@ -169,7 +169,7 @@
 
 /* SIDEBAR */
 @utility sidebarBody {
-    @apply absolute top-0 left-0 h-full w-[30rem] border-r border-line bg-background;
+    @apply absolute top-0 left-0 h-full w-[26rem] border-r border-line bg-background lg:w-[30rem];
     transition:
         transform 0.3s ease-in,
         opacity 0.2s ease-in;
@@ -288,7 +288,7 @@
 }
 
 @utility boardBtn {
-    @apply flex w-full cursor-pointer items-center gap-[1.8rem] border-none bg-transparent p-6 pl-12 font-[inherit] text-[1.5rem] font-bold text-inherit transition-[var(--transition)] hover:rounded-r-[50px] hover:bg-sidebar-hover hover:text-main-purple;
+    @apply flex w-full cursor-pointer items-center gap-[1.2rem] border-none bg-transparent p-[1.5rem] pl-[3rem] font-[inherit] text-[1.5rem] font-bold text-inherit transition-[var(--transition)] hover:rounded-r-[50px] hover:bg-sidebar-hover hover:text-main-purple lg:gap-[1.8rem];
 
     &.active {
         @apply rounded-r-[50px] bg-main-purple text-white;

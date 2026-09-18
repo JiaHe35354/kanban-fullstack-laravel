@@ -55,7 +55,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 className={cn(
                     'grid h-screen grid-cols-1 grid-rows-[6.4rem_1fr] transition-[grid-template-columns] duration-300 ease-in tb:grid-rows-[8.2rem_1fr] lg:grid-rows-[9.7rem_1fr]',
                     isSidebarOpen
-                        ? 'grid-cols-[23.1rem_1fr] lg:grid-cols-[30rem_1fr]'
+                        ? 'grid-cols-[26rem_1fr] lg:grid-cols-[30rem_1fr]'
                         : 'grid-cols-[0_1fr]',
                 )}
             >

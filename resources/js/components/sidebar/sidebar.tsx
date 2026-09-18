@@ -47,8 +47,7 @@ export default function Sidebar({
                                     preserveScroll
                                     className={cn(
                                         'boardBtn',
-                                        isActive &&
-                                            'rounded-r-[50px] bg-main-purple text-white',
+                                        isActive && 'active',
                                     )}
                                 >
                                     <IconBoard className="shrink-0" />

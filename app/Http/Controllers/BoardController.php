@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Boards\SyncBoardColumns;
-use App\Constants\ColumnColor;
+use App\Actions\Boards\CreateBoard;
+use App\Actions\Boards\UpdateBoard;
+use App\Http\Requests\Boards\StoreBoardRequest;
+use App\Http\Requests\Boards\UpdateBoardRequest;
 use App\Models\Board;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -40,82 +40,29 @@ class BoardController extends Controller
         ]);
     }
 
-    public function store (Request $request): RedirectResponse
+    public function store (
+        StoreBoardRequest $request,
+        CreateBoard $createBoard
+    ): RedirectResponse
     {
-        $request->merge([
-            'name' => strtolower(trim($request->name)),
-            'columns' => collect($request->columns)
-                ->map(fn ($column) => trim($column))
-                ->all()
-        ]);
-
-        $validated = $request->validate([
-            'name' => [
-                'required', 
-                'string', 
-                'max:255', 
-                Rule::unique('boards', 'name')
-                    ->where('user_id', $request->user()->id),
-            ],
-            'columns' => ['required', 'array', 'min:1', 'max:5'],
-            'columns.*' => ['required', 'string', 'max:255'],
-        ]);
-
-        $board = DB::transaction(function () use ($request, $validated){
-            $board = $request->user()->boards()->create([
-                'name' => $validated['name'],
-            ]);
-
-            $colors = ColumnColor::ALL;
-            
-            $board->columns()->createMany(
-                collect($validated['columns'])
-                    ->map(fn ($name, $index) => [
-                        'name' => trim($name),
-                        'color' => $colors[$index]
-                    ])
-                    ->all()
-            );
-
-            return $board;
-        });
-
-        return redirect()->route('boards.show', $board)->with('success', 'Board created successfully!');;
+        $board = $createBoard->execute(
+            $request->user(),
+            $request->validated()
+        );
+       
+        return redirect()
+            ->route('boards.show', $board)
+            ->with('success', 'Board created successfully!');
     }
 
     public function update (
-        Request $request, 
+        UpdateBoardRequest $request, 
         Board $board, 
-        SyncBoardColumns $syncBoardColumns
+        UpdateBoard $updateBoard
     ): RedirectResponse {
-        Gate::authorize('workWith', $board);
-
-        $validated = $request->validate([
-            'name' => [
-                'required', 
-                'string', 
-                'max:255', 
-            Rule::unique('boards', 'name')
-                ->where('user_id', $request->user()->id)
-                ->ignore($board->id),
-            ],
-            'columns' => ['required', 'array', 'min:1', 'max:5'],
-            'columns.*.id' => ['required', 'string'],
-            'columns.*.name' => ['required', 'string', 'max:255'],
-        ]);
-
-        $board->update([
-            'name' => strtolower(trim ($validated['name'])),
-        ]);
-
-        $syncBoardColumns->execute(
+        $updateBoard->execute(
             $board,
-            collect($validated['columns'])
-                ->map(fn ($column) => [
-                    'id' => (string) $column['id'],
-                    'name' => trim($column['name']),
-                ])
-                ->all()
+            $request->validated()
         );
 
         return redirect()
