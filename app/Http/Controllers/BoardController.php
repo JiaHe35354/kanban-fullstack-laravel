@@ -15,7 +15,7 @@ use Inertia\Response;
 
 class BoardController extends Controller
 {
-    public function index (Request $request): Response|RedirectResponse
+    public function index (Request $request): Response | RedirectResponse
     {
         $firstBoard = $request->user()->boards()->first();
         

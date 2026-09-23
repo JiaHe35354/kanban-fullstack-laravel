@@ -63,7 +63,11 @@ class TaskController extends Controller
             ->where('id', $validated['column_id'])
             ->firstOrFail();
 
-        $moveTask->execute($task, $newColumn);
+        $moveTask->execute(
+            $task,
+            $newColumn,
+            $validated['position'] ?? null
+        );
 
         return redirect()
             ->route('boards.show', $board)
@@ -86,4 +90,6 @@ class TaskController extends Controller
             ->route('boards.show', $board)
             ->with('success', 'Task deleted successfully');
     }
+
+    
 }

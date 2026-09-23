@@ -1,6 +1,23 @@
+import { useDroppable } from '@dnd-kit/react';
+import { CollisionPriority } from '@dnd-kit/abstract';
+
+import type { Column as ColumnType, Task } from '@/types';
 import TaskList from '../task/task-list';
 
-export default function Column({ column }) {
+interface ColumnProps {
+    column: ColumnType;
+    taskIds: number[];
+    tasksById: Map<number, Task>;
+}
+
+export default function Column({ column, taskIds, tasksById }: ColumnProps) {
+    const { ref } = useDroppable({
+        id: `column-${column.id}`,
+        type: 'column',
+        accept: 'task',
+        collisionPriority: CollisionPriority.Low,
+    });
+
     return (
         <li className="flex h-full w-[24rem] shrink-0 flex-col pb-[5rem] tb:w-[28rem]">
             <div className="mb-[1.5rem] flex shrink-0 items-center gap-[1.2rem] tb:mb-[2.5rem]">
@@ -11,8 +28,12 @@ export default function Column({ column }) {
                 <p className="truncate text-[1.2rem] font-bold tracking-[2.4px] text-muted uppercase">{`${column.name} (${column.tasks.length})`}</p>
             </div>
 
-            <div className="h-full min-h-[80vh]">
-                <TaskList tasks={column.tasks} />
+            <div ref={ref} className="h-full min-h-[80vh]">
+                <TaskList
+                    tasksById={tasksById}
+                    taskIds={taskIds}
+                    columnId={column.id}
+                />
             </div>
         </li>
     );

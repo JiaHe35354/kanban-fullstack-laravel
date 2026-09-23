@@ -1,4 +1,5 @@
-import { createContext, useContext, type ReactNode } from 'react';
+import { createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
 
 import type { BoardContextType } from '@/types';
 
@@ -19,7 +20,9 @@ export function BoardProvider({
 export function useBoard() {
     const context = useContext(BoardContext);
 
-    if (!context) throw new Error('useBoard must be used within BoardProvider');
+    if (!context) {
+        throw new Error('useBoard must be used within BoardProvider');
+    }
 
     return context;
 }
