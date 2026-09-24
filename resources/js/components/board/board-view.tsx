@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { router } from '@inertiajs/react';
 import { DragDropProvider } from '@dnd-kit/react';
 import { isSortable } from '@dnd-kit/react/sortable';
@@ -17,20 +17,20 @@ export default function BoardView() {
 
     const [columnTaskIds, setColumnTaskIds] = useState<
         Record<string, number[]>
-    >(() => {
-        if (!activeBoard) {
-            return {};
-        }
+    >({});
 
-        const initialColumnTaskIds: Record<string, number[]> = {};
+    useEffect(() => {
+        if (!activeBoard) return;
+
+        const newColumnTaskIds: Record<string, number[]> = {};
 
         activeBoard.columns?.forEach((column) => {
-            initialColumnTaskIds[`column-${column.id}`] =
+            newColumnTaskIds[`column-${column.id}`] =
                 column.tasks?.map((task) => task.id) ?? [];
         });
 
-        return initialColumnTaskIds;
-    });
+        setColumnTaskIds(newColumnTaskIds);
+    }, [activeBoard]);
 
     const tasksById = new Map<number, Task>();
 
