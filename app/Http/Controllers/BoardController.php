@@ -17,7 +17,11 @@ class BoardController extends Controller
 {
     public function index (Request $request): Response | RedirectResponse
     {
-        $firstBoard = $request->user()->boards()->first();
+        $firstBoard = $request->user()
+            ->boards()
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->first();
         
         if ($firstBoard) {
             return redirect()->route('boards.show', $firstBoard->id);
