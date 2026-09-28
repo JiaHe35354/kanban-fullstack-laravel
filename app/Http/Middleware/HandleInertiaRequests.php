@@ -45,6 +45,7 @@ class HandleInertiaRequests extends Middleware
             'boards' => fn() => $request->user()?->boards()
                 ->select('id', 'name')
                 ->orderBy('created_at')
+                ->orderBy('id')
                 ->get() ?? [],
             
             'flash' => [

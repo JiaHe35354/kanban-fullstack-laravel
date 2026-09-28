@@ -1,9 +1,9 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 
-import Toaster from '@/components/ui/Toaster';
-import Header from '@/components/header/Header';
+import Toaster from '@/components/ui/toaster';
+import Header from '@/components/header/header';
 import Sidebar from '@/components/sidebar/sidebar';
 import type { SharedProps } from '@/types';
 import { cn } from '@/lib/utils';

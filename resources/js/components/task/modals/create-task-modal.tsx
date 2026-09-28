@@ -32,7 +32,7 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         title: '',
         description: '',
         subtasks: [''],
-        column_id: columns[0]?.id ?? 0,
+        column_id: columns[0]?.id,
     });
 
     const items: DynamicItem[] = form.data.subtasks.map((value, index) => ({
@@ -40,12 +40,17 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         value,
     }));
 
+    const firstColumnId = activeBoard?.columns?.[0]?.id;
+    const boardId = activeBoard?.id;
+
     // Set the first column when the board/columns become available.
     useEffect(() => {
-        if (columns.length > 0 && !form.data.column_id) {
-            form.setData('column_id', columns[0].id);
+        if (!isOpen || !boardId || !firstColumnId) return;
+
+        if (form.data.column_id !== firstColumnId) {
+            form.setData('column_id', firstColumnId);
         }
-    }, [columns, form.data.column_id]);
+    }, [isOpen, boardId, firstColumnId]);
 
     const selectedColumn =
         columns.find((column) => column.id === form.data.column_id) ??
@@ -197,6 +202,11 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
                         }}
                         disabled={form.processing}
                     />
+                    {form.errors.column_id && (
+                        <p className="mt-2 text-[1.3rem] text-red">
+                            {form.errors.column_id}
+                        </p>
+                    )}
                 </div>
 
                 <button
