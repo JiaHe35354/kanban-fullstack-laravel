@@ -18,8 +18,26 @@ services:
         env_file:
             - .env
 
+        depends_on:
+            - db
+
         command: sh -c "npm ci && (php artisan serve --host=0.0.0.0 --port=8000 & npm run dev -- --host=0.0.0.0)"
+
+    db:
+        image: postgres:17
+
+        environment:
+            POSTGRES_DB: kanban
+            POSTGRES_USER: kanban
+            POSTGRES_PASSWORD: password
+
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+        ports:
+            - '5432:5432'
 
 volumes:
     vendor:
     node_modules:
+    postgres_data:
