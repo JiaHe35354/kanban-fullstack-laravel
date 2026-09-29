@@ -21,25 +21,25 @@ class BoardSeeder extends Seeder
         $user = User::where('email', 'test@example.com')->firstOrFail();
 
         foreach ($data['boards'] as $boardData) {
-            $board = $user->boards()->create([
+            $board = $user->boards()->firstOrCreate([
                 'name' => $boardData['name'],
             ]);
 
             foreach ($boardData['columns'] as $columnData) {
-                $column = $board->columns()->create([
+                $column = $board->columns()->firstOrCreate([
                     'name' => $columnData['name'],
                     'color' => $columnData['color'],
                 ]);
 
                 foreach ($columnData['tasks'] as $index => $taskData) {
-                    $task = $column->tasks()->create([
+                    $task = $column->tasks()->firstOrCreate([
                         'title' => $taskData['title'],
                         'description' => $taskData['description'],
                         'position' => $index,
                     ]);
 
                     foreach ($taskData['subtasks'] as $subtaskData) {
-                        $task->subtasks()->create([
+                        $task->subtasks()->firstOrCreate([
                             'title' => $subtaskData['title'],
                             'is_completed' => $subtaskData['isCompleted'],
                         ]);
