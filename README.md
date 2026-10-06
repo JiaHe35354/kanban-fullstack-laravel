@@ -4,6 +4,7 @@ A full-stack Kanban board application built with Laravel, Inertia.js, React, Typ
 
 ## Links
 
+- Watch Demo Video: [Demo Video](https://www.loom.com/share/8889725c44ae4226b8c78894cc3c9451)
 - Live Site URL: [Live site URL](https://kanban-fullstack-laravel.onrender.com)
 - GitHub Repository: [Github Repo URL](https://github.com/JiaHe35354/kanban-fullstack-laravel)
 
