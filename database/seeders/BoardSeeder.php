@@ -34,6 +34,8 @@ class BoardSeeder extends Seeder
                 foreach ($columnData['tasks'] as $index => $taskData) {
                     $task = $column->tasks()->firstOrCreate([
                         'title' => $taskData['title'],
+                    ],
+                    [
                         'description' => $taskData['description'],
                         'position' => $index,
                     ]);
