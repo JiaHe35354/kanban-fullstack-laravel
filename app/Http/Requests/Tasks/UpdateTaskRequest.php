@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Tasks;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

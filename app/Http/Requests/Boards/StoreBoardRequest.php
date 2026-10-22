@@ -15,13 +15,13 @@ class StoreBoardRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation():void
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'name' => strtolower(trim($this->name)),
             'columns' => collect($this->columns)
                 ->map(fn ($column) => trim($column))
-                ->all()
+                ->all(),
         ]);
     }
 
@@ -29,9 +29,9 @@ class StoreBoardRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 
-                'string', 
-                'max:255', 
+                'required',
+                'string',
+                'max:255',
                 Rule::unique('boards', 'name')
                     ->where('user_id', $this->user()->id),
             ],

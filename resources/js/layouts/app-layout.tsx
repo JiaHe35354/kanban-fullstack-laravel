@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import Toaster from '@/components/ui/toaster';
+import EmptyBoard from '@/components/board/empty-board';
+import CreateBoardModal from '@/components/board/modals/create-board-modal';
 import Header from '@/components/header/header';
 import Sidebar from '@/components/sidebar/sidebar';
-import type { SharedProps } from '@/types';
-import { cn } from '@/lib/utils';
-import CreateBoardModal from '@/components/board/modals/create-board-modal';
-import EmptyBoard from '@/components/board/empty-board';
 import ShowSidebar from '@/components/ui/show-sidebar';
+import Toaster from '@/components/ui/toaster';
+import { cn } from '@/lib/utils';
+import type { SharedProps } from '@/types';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { boards, flash } = usePage<SharedProps>().props;

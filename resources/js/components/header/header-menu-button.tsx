@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
+import type { Board } from '../../types/index';
 import DeleteBoardModal from '../board/modals/delete-board-modal';
 import EditBoardModal from '../board/modals/edit-board-modal';
 import IconVerticalEllipsis from '../icons/icon-vertical-ellipsis';
-import type { Board } from '../../types/index';
 
 interface HeaderMenuButtonProps {
     boards: Board[];

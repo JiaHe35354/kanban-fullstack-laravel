@@ -23,8 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/boards/{board}/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::put('/boards/{board}/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::patch(
-      '/boards/{board}/tasks/{task}/status', 
-      [TaskController::class, 'updateStatus']
+        '/boards/{board}/tasks/{task}/status',
+        [TaskController::class, 'updateStatus']
     )->name('tasks.update-status');
     Route::delete('/boards/{board}/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 

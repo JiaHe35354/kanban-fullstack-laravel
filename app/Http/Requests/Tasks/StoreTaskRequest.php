@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests\Tasks;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Override;
 
 class StoreTaskRequest extends FormRequest
 {
@@ -34,14 +32,14 @@ class StoreTaskRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'column_id' => [
-                'required', 
-                'integer', 
+                'required',
+                'integer',
                 Rule::exists('columns', 'id')
-                    ->where('board_id', $this->board->id)
+                    ->where('board_id', $this->board->id),
             ],
             'subtasks' => ['required', 'array', 'min:1', 'max:10'],
             'subtasks.*' => ['required', 'string', 'max:255'],
-            
+
         ];
     }
 }

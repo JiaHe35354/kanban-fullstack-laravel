@@ -12,7 +12,7 @@ use Inertia\Response;
 
 class LoginController extends Controller
 {
-    public function demo (Request $request): RedirectResponse
+    public function demo(Request $request): RedirectResponse
     {
         $user = User::where('email', 'test@example.com')->firstOrFail();
 
@@ -48,7 +48,7 @@ class LoginController extends Controller
     }
 
     public function destroy(Request $request)
-     {
+    {
         Auth::logout();
 
         $request->session()->invalidate();

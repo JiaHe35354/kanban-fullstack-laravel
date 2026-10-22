@@ -29,7 +29,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     }, []);
 
     useEffect(() => {
-        if (!mounted) return;
+        if (!mounted) {
+return;
+}
 
         localStorage.setItem('theme', theme);
         document.documentElement.setAttribute('data-theme', theme);

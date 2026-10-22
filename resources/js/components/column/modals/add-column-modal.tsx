@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
-import { useBoard } from '@/contexts/board-context';
-import type { ModalProps } from '@/types';
-import Modal from '@/components/ui/modal';
-import IconCross from '@/components/icons/icon-cross';
-import { formatName } from '@/lib/utils';
 import { store } from '@/actions/App/Http/Controllers/ColumnController';
+import IconCross from '@/components/icons/icon-cross';
+import Modal from '@/components/ui/modal';
+import { useBoard } from '@/contexts/board-context';
+import { formatName } from '@/lib/utils';
+import type { ModalProps } from '@/types';
 
 interface NewColumn {
     id: string;
@@ -32,7 +32,9 @@ export default function AddColumnModal({ isOpen, onClose }: ModalProps) {
     const canRemoveColumn = form.data.columns.length > 1;
 
     useEffect(() => {
-        if (!isOpen || !activeBoard) return;
+        if (!isOpen || !activeBoard) {
+return;
+}
 
         const maxNewColumns = 5 - activeBoard.columns.length;
 
@@ -52,7 +54,9 @@ export default function AddColumnModal({ isOpen, onClose }: ModalProps) {
     );
 
     const handleAddColumn = () => {
-        if (!canAddColumn) return;
+        if (!canAddColumn) {
+return;
+}
 
         form.setData('columns', [
             ...form.data.columns,
@@ -66,7 +70,9 @@ export default function AddColumnModal({ isOpen, onClose }: ModalProps) {
     };
 
     const handleRemoveColumn = (id: string) => {
-        if (!canRemoveColumn) return;
+        if (!canRemoveColumn) {
+return;
+}
 
         form.setData(
             'columns',
@@ -81,7 +87,9 @@ export default function AddColumnModal({ isOpen, onClose }: ModalProps) {
 
         setSubmitted(true);
 
-        if (!activeBoard || hasEmptyColumn) return;
+        if (!activeBoard || hasEmptyColumn) {
+return;
+}
 
         form.post(store(activeBoard).url, {
             onSuccess: () => {

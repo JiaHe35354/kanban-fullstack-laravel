@@ -1,16 +1,15 @@
+import { useForm } from '@inertiajs/react';
 import React, { useMemo } from 'react';
 import { useEffect, useState } from 'react';
-import { useForm } from '@inertiajs/react';
 
-import Modal from '@/components/ui/modal';
-import FormField from '@/components/ui/form-field';
-import DynamicInputList, {
-    type DynamicItem,
-} from '@/components/ui/dynamic-input-list';
-import type { ModalProps } from '@/types';
-import { useBoard } from '@/contexts/board-context';
-import StatusDropDown from '@/components/ui/status-drop-down';
 import { store } from '@/actions/App/Http/Controllers/TaskController';
+import DynamicInputList from '@/components/ui/dynamic-input-list';
+import type {DynamicItem} from '@/components/ui/dynamic-input-list';
+import FormField from '@/components/ui/form-field';
+import Modal from '@/components/ui/modal';
+import StatusDropDown from '@/components/ui/status-drop-down';
+import { useBoard } from '@/contexts/board-context';
+import type { ModalProps } from '@/types';
 
 interface CreateTaskFormData {
     title: string;
@@ -45,7 +44,9 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
 
     // Set the first column when the board/columns become available.
     useEffect(() => {
-        if (!isOpen || !boardId || !firstColumnId) return;
+        if (!isOpen || !boardId || !firstColumnId) {
+return;
+}
 
         if (form.data.column_id !== firstColumnId) {
             form.setData('column_id', firstColumnId);
@@ -57,7 +58,9 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         columns[0];
 
     const handleClose = () => {
-        if (form.processing) return;
+        if (form.processing) {
+return;
+}
 
         form.reset();
         form.clearErrors();
@@ -95,7 +98,9 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
     const handleUpdateSubtask = (id: string, value: string) => {
         const index = subtaskIds.indexOf(id);
 
-        if (index === -1) return;
+        if (index === -1) {
+return;
+}
 
         const newSubtasks = [...form.data.subtasks];
 
@@ -108,7 +113,9 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
     const handleRemoveSubtask = (id: string) => {
         const index = subtaskIds.indexOf(id);
 
-        if (index === -1) return;
+        if (index === -1) {
+return;
+}
 
         const newSubtaskIds = subtaskIds.filter(
             (subtaskId) => subtaskId !== id,
@@ -129,9 +136,13 @@ export default function CreateTaskModal({ isOpen, onClose }: ModalProps) {
         e.preventDefault();
         setSubmitted(true);
 
-        if (!activeBoard) return;
+        if (!activeBoard) {
+return;
+}
 
-        if (isTitleEmpty || hasEmptySubtasks) return;
+        if (isTitleEmpty || hasEmptySubtasks) {
+return;
+}
 
         form.post(store({ board: activeBoard.id }).url, {
             onSuccess: () => {

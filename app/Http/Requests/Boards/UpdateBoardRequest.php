@@ -4,7 +4,6 @@ namespace App\Http\Requests\Boards;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Override;
 
 class UpdateBoardRequest extends FormRequest
 {
@@ -33,9 +32,9 @@ class UpdateBoardRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 
-                'string', 
-                'max:255', 
+                'required',
+                'string',
+                'max:255',
                 Rule::unique('boards', 'name')
                     ->where('user_id', $this->user()->id)
                     ->ignore($this->board->id),

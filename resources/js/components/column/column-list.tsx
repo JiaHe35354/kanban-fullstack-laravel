@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { usePage } from '@inertiajs/react';
+import { useState } from 'react';
 import type { Board, SharedProps, Task } from '@/types';
 
-import AddColumnModal from './modals/add-column-modal';
 import Column from './column';
+import AddColumnModal from './modals/add-column-modal';
 
 interface ColumnListProps {
     columnTaskIds: Record<string, number[]>;

@@ -5,7 +5,9 @@ export function handleDialogBackdropClick(
     onClose: () => void,
     isLoading: boolean = false,
 ) {
-    if (isLoading) return;
+    if (isLoading) {
+return;
+}
 
     const rect = e.currentTarget.getBoundingClientRect();
     const isClickOutside =

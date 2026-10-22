@@ -35,10 +35,10 @@ class BoardSeeder extends Seeder
                     $task = $column->tasks()->firstOrCreate([
                         'title' => $taskData['title'],
                     ],
-                    [
-                        'description' => $taskData['description'],
-                        'position' => $index,
-                    ]);
+                        [
+                            'description' => $taskData['description'],
+                            'position' => $index,
+                        ]);
 
                     foreach ($taskData['subtasks'] as $subtaskData) {
                         $task->subtasks()->firstOrCreate([

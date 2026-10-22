@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react';
 
+import { update } from '@/actions/App/Http/Controllers/BoardController';
+import type { DynamicItem } from '@/components/ui/dynamic-input-list';
+import DynamicInputList from '@/components/ui/dynamic-input-list';
+import FormField from '@/components/ui/form-field';
+import Modal from '@/components/ui/modal';
 import { useBoard } from '@/contexts/board-context';
 import type { ModalProps } from '@/types';
-import type { DynamicItem } from '@/components/ui/dynamic-input-list';
-import Modal from '@/components/ui/modal';
-import FormField from '@/components/ui/form-field';
-import DynamicInputList from '@/components/ui/dynamic-input-list';
-import { update } from '@/actions/App/Http/Controllers/BoardController';
 
 interface BoardColumnForm {
     id: string;
@@ -34,7 +34,9 @@ export default function EditBoardModal({ isOpen, onClose }: ModalProps) {
 
     // Sync state whenever the modal opens or activeBoard changes
     useEffect(() => {
-        if (!isOpen || !activeBoard) return;
+        if (!isOpen || !activeBoard) {
+return;
+}
 
         form.setData({
             name: activeBoard.name,
@@ -83,7 +85,9 @@ export default function EditBoardModal({ isOpen, onClose }: ModalProps) {
             (column) => String(column.id) === id,
         );
 
-        if (index === -1) return;
+        if (index === -1) {
+return;
+}
 
         const columns = [...form.data.columns];
 
@@ -111,7 +115,9 @@ export default function EditBoardModal({ isOpen, onClose }: ModalProps) {
 
         setSubmitted(true);
 
-        if (isNameEmpty || hasEmptyColumn || !activeBoard) return;
+        if (isNameEmpty || hasEmptyColumn || !activeBoard) {
+return;
+}
 
         form.put(update(activeBoard).url, {
             onSuccess: () => {

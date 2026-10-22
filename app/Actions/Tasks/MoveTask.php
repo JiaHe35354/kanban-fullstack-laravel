@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class MoveTask
 {
     public function execute(
-        Task $task, 
+        Task $task,
         Column $newColumn,
         ?int $newPosition = null
     ): void {
@@ -37,13 +37,15 @@ class MoveTask
         });
     }
 
-    private function moveWithinColumn (
+    private function moveWithinColumn(
         Task $task,
         ?int $newPosition = null
     ): void {
         $oldPosition = $task->position;
 
-        if ($oldPosition === $newPosition) return;
+        if ($oldPosition === $newPosition) {
+            return;
+        }
 
         if ($newPosition > $oldPosition) {
             $task->column
@@ -70,7 +72,7 @@ class MoveTask
         ]);
     }
 
-    private function moveBetweenColumns (
+    private function moveBetweenColumns(
         Task $task,
         Column $oldColumn,
         Column $newColumn,

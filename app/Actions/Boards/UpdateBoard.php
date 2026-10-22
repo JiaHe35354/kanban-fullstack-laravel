@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\DB;
 class UpdateBoard
 {
     public function __construct(
-      private SyncBoardColumns $syncBoardColumns,
-    ) {
-    }
+        private SyncBoardColumns $syncBoardColumns,
+    ) {}
 
-    public function execute (Board $board, array $data): void
+    public function execute(Board $board, array $data): void
     {
         DB::transaction(function () use ($board, $data) {
             $board->update([

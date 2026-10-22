@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react';
 
-import Modal from '@/components/ui/modal';
+import { update } from '@/actions/App/Http/Controllers/TaskController';
+import DynamicInputList from '@/components/ui/dynamic-input-list';
+import type {DynamicItem} from '@/components/ui/dynamic-input-list';
 import FormField from '@/components/ui/form-field';
-import DynamicInputList, {
-    type DynamicItem,
-} from '@/components/ui/dynamic-input-list';
+import Modal from '@/components/ui/modal';
 import StatusDropDown from '@/components/ui/status-drop-down';
 import { useBoard } from '@/contexts/board-context';
-import type { ModalProps } from '@/types';
 import { useTaskModal } from '@/contexts/task-modal-context';
-import { update } from '@/actions/App/Http/Controllers/TaskController';
+import type { ModalProps } from '@/types';
 
 interface TaskSubtaskForm {
     id: string;
@@ -46,7 +45,9 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
 
     // Populate initial state whenever the selected task changes
     useEffect(() => {
-        if (!isOpen || !activeTask) return;
+        if (!isOpen || !activeTask) {
+return;
+}
 
         form.setData({
             title: activeTask.title,
@@ -62,7 +63,9 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
         form.clearErrors();
     }, [isOpen, activeTask]);
 
-    if (!activeTask) return null;
+    if (!activeTask) {
+return null;
+}
 
     const isTitleEmpty = !form.data.title.trim();
     const hasEmptySubtasks = form.data.subtasks.some((s) => !s.title.trim());
@@ -141,7 +144,9 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
     };
 
     const handleClose = () => {
-        if (form.processing) return;
+        if (form.processing) {
+return;
+}
 
         form.clearErrors();
         setSubmitted(false);
@@ -153,7 +158,9 @@ export default function EditTaskModal({ isOpen, onClose }: ModalProps) {
         e.preventDefault();
         setSubmitted(true);
 
-        if (!activeBoard || isTitleEmpty || hasEmptySubtasks) return;
+        if (!activeBoard || isTitleEmpty || hasEmptySubtasks) {
+return;
+}
 
         form.put(
             update({

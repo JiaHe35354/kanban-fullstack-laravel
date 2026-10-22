@@ -1,10 +1,10 @@
-import React from 'react';
 import { useSortable } from '@dnd-kit/react/sortable';
+import React from 'react';
 
 import { useTaskModal } from '@/contexts/task-modal-context';
+import { cn } from '@/lib/utils';
 import type { Task } from '@/types';
 import { getSubtaskStats } from '@/util/taskHelper';
-import { cn } from '@/lib/utils';
 
 interface TaskCardProps {
     task: Task;

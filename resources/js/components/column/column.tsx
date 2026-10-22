@@ -1,5 +1,5 @@
-import { useDroppable } from '@dnd-kit/react';
 import { CollisionPriority } from '@dnd-kit/abstract';
+import { useDroppable } from '@dnd-kit/react';
 
 import type { Column as ColumnType, Task } from '@/types';
 import TaskList from '../task/task-list';

@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { router } from '@inertiajs/react';
-import { DragDropProvider } from '@dnd-kit/react';
-import { isSortable } from '@dnd-kit/react/sortable';
 import { PointerSensor, PointerActivationConstraints } from '@dnd-kit/dom';
 import { move } from '@dnd-kit/helpers';
+import { DragDropProvider } from '@dnd-kit/react';
+import { isSortable } from '@dnd-kit/react/sortable';
+import { router } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
 import { updateStatus } from '@/actions/App/Http/Controllers/TaskController';
-import { TaskModalProvider } from '@/contexts/task-modal-context';
 import { useBoard } from '@/contexts/board-context';
+import { TaskModalProvider } from '@/contexts/task-modal-context';
 import type { Task } from '@/types';
 import ColumnList from '../column/column-list';
 import TaskModalsHost from '../task/modals/task-modals-host';
@@ -20,7 +20,9 @@ export default function BoardView() {
     >({});
 
     useEffect(() => {
-        if (!activeBoard) return;
+        if (!activeBoard) {
+return;
+}
 
         const newColumnTaskIds: Record<string, number[]> = {};
 
@@ -43,23 +45,35 @@ export default function BoardView() {
     function handleDragOver(event: any) {
         const { source, target } = event.operation;
 
-        if (!source || !target) return;
+        if (!source || !target) {
+return;
+}
 
-        if (source.type !== 'task') return;
+        if (source.type !== 'task') {
+return;
+}
 
         setColumnTaskIds((current) => move(current, event));
     }
 
     function handleDragEnd(event: any) {
-        if (event.canceled) return;
+        if (event.canceled) {
+return;
+}
 
         const { source, target } = event.operation;
 
-        if (!source || !target) return;
+        if (!source || !target) {
+return;
+}
 
-        if (source.type !== 'task') return;
+        if (source.type !== 'task') {
+return;
+}
 
-        if (!activeBoard) return;
+        if (!activeBoard) {
+return;
+}
 
         if (!isSortable(source)) {
             return;
@@ -76,7 +90,9 @@ export default function BoardView() {
         );
     }
 
-    if (!activeBoard) return null;
+    if (!activeBoard) {
+return null;
+}
 
     return (
         <DragDropProvider

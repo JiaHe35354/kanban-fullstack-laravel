@@ -1,10 +1,11 @@
 import {
     createContext,
-    type ReactNode,
+    
     useContext,
     useMemo,
-    useState,
+    useState
 } from 'react';
+import type {ReactNode} from 'react';
 
 import type { Column, Task } from '@/types';
 import { useBoard } from './board-context';
@@ -35,7 +36,9 @@ export function TaskModalProvider({ children }: { children: ReactNode }) {
     const [activeModal, setActiveModal] = useState<ModalType>(null);
 
     const currentColumn = useMemo(() => {
-        if (!activeTask) return null;
+        if (!activeTask) {
+return null;
+}
 
         return columns.find((col) => col.id === activeTask.column_id) ?? null;
     }, [columns, activeTask]);
@@ -46,13 +49,17 @@ export function TaskModalProvider({ children }: { children: ReactNode }) {
     };
 
     const openEditTask = (task?: Task) => {
-        if (task) setActiveTask(task);
+        if (task) {
+setActiveTask(task);
+}
 
         setActiveModal('edit');
     };
 
     const openDeleteTask = (task?: Task) => {
-        if (task) setActiveTask(task);
+        if (task) {
+setActiveTask(task);
+}
 
         setActiveModal('delete');
     };

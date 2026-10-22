@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Tasks;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +24,7 @@ class UpdateTaskStatusRequest extends FormRequest
                 Rule::exists('columns', 'id')
                     ->where('board_id', $this->board->id),
             ],
-            'position' => ['sometimes', 'integer', 'min:0']
+            'position' => ['sometimes', 'integer', 'min:0'],
         ];
     }
 }

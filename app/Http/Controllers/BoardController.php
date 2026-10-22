@@ -15,53 +15,52 @@ use Inertia\Response;
 
 class BoardController extends Controller
 {
-    public function index (Request $request): Response | RedirectResponse
+    public function index(Request $request): Response|RedirectResponse
     {
         $firstBoard = $request->user()
             ->boards()
             ->orderBy('created_at')
             ->orderBy('id')
             ->first();
-        
+
         if ($firstBoard) {
             return redirect()->route('boards.show', $firstBoard->id);
         }
 
         return Inertia::render('boards/show', [
             'boards' => [],
-            'activeBoard' => null
+            'activeBoard' => null,
         ]);
     }
 
-    public function show (Board $board): Response
+    public function show(Board $board): Response
     {
         Gate::authorize('workWith', $board);
 
         $board->load('columns.tasks.subtasks');
 
         return Inertia::render('boards/show', [
-            'activeBoard' => $board
+            'activeBoard' => $board,
         ]);
     }
 
-    public function store (
+    public function store(
         StoreBoardRequest $request,
         CreateBoard $createBoard
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         $board = $createBoard->execute(
             $request->user(),
             $request->validated()
         );
-       
+
         return redirect()
             ->route('boards.show', $board)
             ->with('success', 'Board created successfully!');
     }
 
-    public function update (
-        UpdateBoardRequest $request, 
-        Board $board, 
+    public function update(
+        UpdateBoardRequest $request,
+        Board $board,
         UpdateBoard $updateBoard
     ): RedirectResponse {
         $updateBoard->execute(
@@ -74,7 +73,7 @@ class BoardController extends Controller
             ->with('success', 'Board updated successfully!');
     }
 
-    public function destroy (Board $board): RedirectResponse
+    public function destroy(Board $board): RedirectResponse
     {
         Gate::authorize('workWith', $board);
 

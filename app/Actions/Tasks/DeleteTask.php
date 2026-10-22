@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class DeleteTask
 {
-    public function execute (Task $task)
+    public function execute(Task $task)
     {
         DB::transaction(function () use ($task) {
             $column = $task->column;

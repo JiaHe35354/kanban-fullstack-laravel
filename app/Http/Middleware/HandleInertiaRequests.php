@@ -42,12 +42,12 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
 
-            'boards' => fn() => $request->user()?->boards()
+            'boards' => fn () => $request->user()?->boards()
                 ->select('id', 'name')
                 ->orderBy('created_at')
                 ->orderBy('id')
                 ->get() ?? [],
-            
+
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

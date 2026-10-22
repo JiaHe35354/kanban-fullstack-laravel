@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import React, { useState } from 'react';
 
-import Modal from '@/components/ui/modal';
-import FormField from '@/components/ui/form-field';
-import DynamicInputList, {
-    type DynamicItem,
-} from '@/components/ui/dynamic-input-list';
 import { store } from '@/actions/App/Http/Controllers/BoardController';
+import DynamicInputList from '@/components/ui/dynamic-input-list';
+import type {DynamicItem} from '@/components/ui/dynamic-input-list';
+import FormField from '@/components/ui/form-field';
+import Modal from '@/components/ui/modal';
 import type { ModalProps } from '../../../types/index';
 
 export default function CreateBoardModal({ isOpen, onClose }: ModalProps) {
@@ -24,7 +23,9 @@ export default function CreateBoardModal({ isOpen, onClose }: ModalProps) {
     }));
 
     const handleClose = () => {
-        if (form.processing) return;
+        if (form.processing) {
+return;
+}
 
         form.reset();
         form.clearErrors();
@@ -50,7 +51,9 @@ export default function CreateBoardModal({ isOpen, onClose }: ModalProps) {
     const handleUpdateColumn = (id: string, value: string) => {
         const index = columnIds.indexOf(id);
 
-        if (index === -1) return;
+        if (index === -1) {
+return;
+}
 
         const newColumns = [...form.data.columns];
         newColumns[index] = value;
@@ -62,7 +65,9 @@ export default function CreateBoardModal({ isOpen, onClose }: ModalProps) {
     const handleRemoveColumn = (id: string) => {
         const index = columnIds.indexOf(id);
 
-        if (index === -1) return;
+        if (index === -1) {
+return;
+}
 
         const newColumnIds = columnIds.filter((columnId) => columnId !== id);
         const newColumns = form.data.columns.filter(

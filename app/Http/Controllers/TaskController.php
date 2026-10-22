@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Actions\Tasks\CreateTask;
 use App\Actions\Tasks\DeleteTask;
 use App\Actions\Tasks\MoveTask;
-use App\Actions\Tasks\SyncTaskSubtasks;
 use App\Actions\Tasks\UpdateTask;
 use App\Http\Requests\Tasks\StoreTaskRequest;
 use App\Http\Requests\Tasks\UpdateTaskRequest;
@@ -13,17 +12,14 @@ use App\Http\Requests\Tasks\UpdateTaskStatusRequest;
 use App\Models\Board;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    public function store (
+    public function store(
         StoreTaskRequest $request,
         Board $board,
         CreateTask $createTask
-        ): RedirectResponse
-    {
+    ): RedirectResponse {
         $createTask->execute(
             $board,
             $request->validated()
@@ -31,7 +27,7 @@ class TaskController extends Controller
 
         return redirect()
             ->route('boards.show', $board)
-            ->with('success', 'Task created successfully!');;
+            ->with('success', 'Task created successfully!');
     }
 
     public function update(
@@ -74,8 +70,8 @@ class TaskController extends Controller
             ->with('success', 'Task status moved successfully!');
     }
 
-    public function destroy (
-        Board $board, 
+    public function destroy(
+        Board $board,
         Task $task,
         DeleteTask $deleteTask
     ): RedirectResponse {
@@ -90,6 +86,4 @@ class TaskController extends Controller
             ->route('boards.show', $board)
             ->with('success', 'Task deleted successfully');
     }
-
-    
 }

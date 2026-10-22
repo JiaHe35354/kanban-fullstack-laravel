@@ -6,9 +6,9 @@ use App\Constants\ColumnColor;
 use App\Models\Board;
 use Illuminate\Support\Facades\DB;
 
-class SyncBoardColumns 
+class SyncBoardColumns
 {
-    public function execute (Board $board, array $columns): void
+    public function execute(Board $board, array $columns): void
     {
         DB::transaction(function () use ($board, $columns) {
             $originalColumns = $board->columns()->get();

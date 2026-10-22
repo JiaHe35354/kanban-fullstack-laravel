@@ -1,11 +1,11 @@
-import React from 'react';
 import { Head, useForm } from '@inertiajs/react';
+import React from 'react';
 
-import AuthLayout from '@/layouts/auth-layout';
-import { store } from '@/actions/App/Http/Controllers/RegisterController';
 import { create } from '@/actions/App/Http/Controllers/LoginController';
+import { store } from '@/actions/App/Http/Controllers/RegisterController';
 import AuthFooter from '@/components/auth/auth-footer';
 import AuthInput from '@/components/auth/auth-input';
+import AuthLayout from '@/layouts/auth-layout';
 
 export default function Register() {
     const form = useForm({

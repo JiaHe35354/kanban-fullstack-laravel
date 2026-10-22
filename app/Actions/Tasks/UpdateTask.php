@@ -8,18 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateTask
 {
-  public function __construct(
-    private MoveTask $moveTask,
-    private SyncTaskSubtasks $syncTaskSubtasks,
-  )
-  {
-  }
+    public function __construct(
+        private MoveTask $moveTask,
+        private SyncTaskSubtasks $syncTaskSubtasks,
+    ) {}
 
-  public function execute(
-    Board $board,
-    Task $task,
-    array $data
-  ): void {
+    public function execute(
+        Board $board,
+        Task $task,
+        array $data
+    ): void {
         DB::transaction(function () use ($board, $task, $data) {
             $newColumn = $board->columns()
                 ->where('id', $data['column_id'])
@@ -43,5 +41,5 @@ class UpdateTask
             );
         });
 
-  }
+    }
 }

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useBoard } from '@/contexts/board-context';
 
-import type { Board } from '@/types';
 import { cn, formatName } from '@/lib/utils';
+import type { Board } from '@/types';
 import IconChevronDown from '../icons/icon-chevron-down';
 import IconPlus from '../icons/icon-plus';
 import CreateTaskModal from '../task/modals/create-task-modal';

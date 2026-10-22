@@ -1,10 +1,10 @@
 import { Link, useForm } from '@inertiajs/react';
 
-import { useBoard } from '@/contexts/board-context';
-import type { Board } from '@/types';
-import { cn, formatName } from '@/lib/utils';
 import { show } from '@/actions/App/Http/Controllers/BoardController';
 import { destroy } from '@/actions/App/Http/Controllers/LoginController';
+import { useBoard } from '@/contexts/board-context';
+import { cn, formatName } from '@/lib/utils';
+import type { Board } from '@/types';
 import IconBoard from '../icons/icon-board';
 import IconHideSidebar from '../icons/icon-hide-sidebar';
 import IconLogout from '../icons/icon-logout';

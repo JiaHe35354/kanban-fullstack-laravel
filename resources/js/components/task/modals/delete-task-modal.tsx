@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import { router } from '@inertiajs/react';
+import { useState } from 'react';
 
-import ConfirmModal from '@/components/ui/confirm-modal';
-import type { ModalProps } from '@/types';
-import { useTaskModal } from '@/contexts/task-modal-context';
 import { destroy } from '@/actions/App/Http/Controllers/TaskController';
+import ConfirmModal from '@/components/ui/confirm-modal';
 import { useBoard } from '@/contexts/board-context';
+import { useTaskModal } from '@/contexts/task-modal-context';
+import type { ModalProps } from '@/types';
 
 export default function DeleteTaskModal({ isOpen, onClose }: ModalProps) {
     const { activeBoard } = useBoard();
@@ -15,7 +15,9 @@ export default function DeleteTaskModal({ isOpen, onClose }: ModalProps) {
     const [deleteError, setDeleteError] = useState<string | null>(null);
 
     async function handleDeleteTask() {
-        if (!activeTask) return;
+        if (!activeTask) {
+return;
+}
 
         setIsDeleting(true);
         setDeleteError(null);

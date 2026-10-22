@@ -23,7 +23,9 @@ export default function TaskList({
             {taskIds.map((taskId, index) => {
                 const task = tasksById.get(taskId);
 
-                if (!task) return null;
+                if (!task) {
+return null;
+}
 
                 return (
                     <TaskCard

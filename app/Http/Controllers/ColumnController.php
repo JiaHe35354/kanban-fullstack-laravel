@@ -36,5 +36,5 @@ class ColumnController extends Controller
         return redirect()
             ->route('boards.show', $board)
             ->with('success', 'Columns added successfully!');
-}
+    }
 }

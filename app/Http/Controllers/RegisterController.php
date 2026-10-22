@@ -17,7 +17,7 @@ class RegisterController extends Controller
         return Inertia::render('auth/register/create');
     }
 
-    public function store (Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -28,7 +28,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $validated['password']
+            'password' => $validated['password'],
         ]);
 
         Auth::login($user);

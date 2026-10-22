@@ -1,17 +1,17 @@
+import { router } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { router } from '@inertiajs/react';
 
+import SubtaskController from '@/actions/App/Http/Controllers/SubtaskController';
+import { updateStatus } from '@/actions/App/Http/Controllers/TaskController';
+import IconCross from '@/components/icons/icon-cross';
+import MenuButton from '@/components/ui/menu-button';
+import StatusDropDown from '@/components/ui/status-drop-down';
+import { useBoard } from '@/contexts/board-context';
 import { useTaskModal } from '@/contexts/task-modal-context';
 import type { ModalProps } from '@/types';
-import { getSubtaskStats } from '@/util/taskHelper';
-import StatusDropDown from '@/components/ui/status-drop-down';
 import { handleDialogBackdropClick } from '@/util/dialog';
-import MenuButton from '@/components/ui/menu-button';
-import IconCross from '@/components/icons/icon-cross';
-import { updateStatus } from '@/actions/App/Http/Controllers/TaskController';
-import { useBoard } from '@/contexts/board-context';
-import SubtaskController from '@/actions/App/Http/Controllers/SubtaskController';
+import { getSubtaskStats } from '@/util/taskHelper';
 
 export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
     const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,9 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
     useEffect(() => {
         const dialog = dialogRef.current;
 
-        if (!dialog) return;
+        if (!dialog) {
+return;
+}
 
         if (isOpen && !dialog.open) {
             dialog.showModal();
@@ -46,9 +48,13 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
     const { total, completed } = getSubtaskStats(activeTask?.subtasks);
 
     function handleStatusChange(newColumnId: number) {
-        if (!activeTask || !activeBoard) return;
+        if (!activeTask || !activeBoard) {
+return;
+}
 
-        if (newColumnId === currentColumn?.id) return;
+        if (newColumnId === currentColumn?.id) {
+return;
+}
 
         setIsLoading(true);
         setError(null);
@@ -79,7 +85,9 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
     }
 
     function handleToggleSubtask(subtaskId: number) {
-        if (!activeTask || !activeBoard) return;
+        if (!activeTask || !activeBoard) {
+return;
+}
 
         setIsLoading(true);
         setError(null);
@@ -117,11 +125,15 @@ export default function TaskDetailsModal({ isOpen, onClose }: ModalProps) {
         );
     }
 
-    if (!mounted) return null;
+    if (!mounted) {
+return null;
+}
 
     const modalRoot = document.getElementById('modal-root');
 
-    if (!modalRoot) return null;
+    if (!modalRoot) {
+return null;
+}
 
     return createPortal(
         <dialog

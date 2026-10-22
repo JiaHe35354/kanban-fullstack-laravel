@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { router } from '@inertiajs/react';
+import { useState } from 'react';
 
 import { destroy } from '@/actions/App/Http/Controllers/BoardController';
-import { useBoard } from '@/contexts/board-context';
 import ConfirmModal from '@/components/ui/confirm-modal';
+import { useBoard } from '@/contexts/board-context';
 import type { ModalProps } from '@/types';
 
 export default function DeleteBoardModal({ isOpen, onClose }: ModalProps) {
@@ -13,7 +13,9 @@ export default function DeleteBoardModal({ isOpen, onClose }: ModalProps) {
     const [formError, setFormError] = useState<string | null>(null);
 
     function handleDeleteBoard() {
-        if (!activeBoard) return;
+        if (!activeBoard) {
+return;
+}
 
         setIsDeleting(true);
         setFormError(null);
